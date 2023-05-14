@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
-import Films from "./Films";
-import NotFound from "./NotFound";
+import Films from "./pages/Films";
+import NotFound from "./pages/NotFound";
 import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
 
 function App() {

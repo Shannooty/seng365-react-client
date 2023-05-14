@@ -2,7 +2,7 @@ type Film = {
     /**
      * Film id as defined by the database
      */
-    id: number,
+    filmId: number,
 
     /**
      * Title as defined by the database
@@ -43,4 +43,9 @@ type Film = {
      * Age rating as defined by the database
      */
     age_rating: string;
+
+    /**
+     * Average user rating
+     */
+    rating: number;
 }
