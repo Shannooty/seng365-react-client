@@ -17,32 +17,35 @@ type Film = {
     /**
      * Release date as defined by the database
      */
-    release_date: Date,
+    releaseDate: string,
 
-    /**
-     * Image filename as defined by the database
-     */
-    image_filename: string,
-
-    /**
-     * Runtime as defined by the database
-     */
-    runtime: number,
 
     /**
      * Director id as defined by the database
      */
-    director_id: number,
+    directorId: number,
+
+    /**
+     * First name of Director
+     */
+    directorFirstName: string,
+
+    /**
+     * Last name of director
+     */
+    directorLastName: string,
+
+
 
     /**
      * Genre id as defined by the database
      */
-    genre_id: number,
+    genreId: number,
 
     /**
      * Age rating as defined by the database
      */
-    age_rating: string;
+    ageRating: string;
 
     /**
      * Average user rating
