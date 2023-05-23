@@ -83,14 +83,14 @@ const Films = () => {
             })
     }
 
-    React.useEffect(() => {
+    const getGenres = async () => {
+        await axios.get(url + '/genres')
+            .then((response) => {
+                setGenres(response.data)
+            })
+    }
 
-        const getGenres = async () => {
-            await axios.get(url + '/genres')
-                .then((response) => {
-                    setGenres(response.data)
-                })
-        }
+    React.useEffect(() => {
         getFilms();
         getGenres();
     }, [currentPage, searchTerm])
@@ -103,7 +103,7 @@ const Films = () => {
                     <Stack spacing={4}>
                         {films.map((film : Film) => (
                             <RouterLink style={{textDecoration: 'none'}} to={`/film/${film.filmId}`}>
-                                <Paper elevation={2}>
+                                <Paper elevation={3}>
                                     <Grid container alignItems="center" justifyContent="center">
                                         <Grid item xs={2}>
                                             <Box
@@ -112,8 +112,8 @@ const Films = () => {
                                                     height: 'auto',
                                                     width: '100%',
                                                 }}
-                                                src={'https://seng365.csse.canterbury.ac.nz/api/v1/films/' + film.filmId + "/image"}
-                                                alt="random"
+                                                src={BASE_URL + "/films/" + film.filmId + "/image"}
+                                                alt="Film image"
                                             />
                                         </Grid>
                                         <Grid item xs={8}>
