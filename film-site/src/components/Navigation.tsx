@@ -12,10 +12,6 @@ const Navbar = () => {
         setSearchTerm(event.target.value);
     }
 
-    React.useEffect(() => {
-
-    }, [])
-
     return (
         <AppBar position="static">
             <Container maxWidth="xl">
