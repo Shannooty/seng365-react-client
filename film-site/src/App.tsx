@@ -6,7 +6,7 @@ import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
 import Navbar from "./components/Navigation";
 import { ThemeProvider } from '@emotion/react';
 import {theme} from "./theme";
-import {SearchContext} from "./Contexts/search-context";
+import {SearchContext} from "./contexts/search-context";
 import Film from "./pages/Film";
 
 function App() {

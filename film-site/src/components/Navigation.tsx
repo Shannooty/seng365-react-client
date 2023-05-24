@@ -1,7 +1,7 @@
 import React, {ChangeEvent} from "react";
 import {AppBar, Box, Container, IconButton, InputBase, Paper, Toolbar} from "@mui/material";
 import {Search} from "@mui/icons-material";
-import {SearchContext} from "../Contexts/search-context";
+import {SearchContext} from "../contexts/search-context";
 import {Link as RouterLink} from "react-router-dom";
 
 

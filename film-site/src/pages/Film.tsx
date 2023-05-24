@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import ErrorPage from "./Error";
 import {defaultFilm} from "../defaults/defaults";
-import {FilmDetailed} from "../components/FilmComponents";
+import {FilmDetailed, SimilarFilms} from "../components/FilmComponents";
 import {ReviewList} from "../components/Review";
 
 const Film = () => {
@@ -54,7 +54,7 @@ const Film = () => {
                 </Box>
                 <Box>
                     <Container sx={{ py: 4, mx: "auto" }} maxWidth="lg">
-
+                        <SimilarFilms film={film}/>
                     </Container>
                 </Box>
             </Stack>

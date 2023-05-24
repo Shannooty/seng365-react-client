@@ -3,7 +3,47 @@ import {BASE_URL} from "../index";
 import {FiberManualRecord, Star} from "@mui/icons-material";
 import React from "react";
 import {UserSmall} from "./UserSmall";
+import Carousel from "react-material-ui-carousel";
+import axios from "axios";
+import {Link as RouterLink} from "react-router-dom";
 
+export const SimilarFilms = (params : {film: Film}) => {
+    const film = params.film;
+    const [similarFilms, setSimilarFilms] = React.useState< Array<Film>>([])
+    let groupByN = (n : number, arr : Film[]) => {
+        let result = [];
+        for (let i = 0; i < arr.length; i += n) result.push(arr.slice(i, i + n));
+        return result;
+    };
+    const getFilms = async () => {
+        const similarGenresFilms = await axios.get(BASE_URL + `/films?genreIds=${film.genreId}`)
+        const similarDirectorFilms = await axios.get(BASE_URL + `/films?directorId=${film.directorId}`)
+
+        if (similarGenresFilms.status === 200 && similarDirectorFilms.status === 200) {
+            const similarGenresFilmIds = similarGenresFilms.data.films.map((film: Film) => (film.filmId))
+            const filmList = similarDirectorFilms.data.films.filter((directorFilm: Film) => !similarGenresFilmIds.includes(directorFilm.filmId))
+            const combinedFilms = [...filmList, ...similarGenresFilms.data.films]
+            setSimilarFilms(combinedFilms.filter((similarFilm: Film) => similarFilm.filmId !== film.filmId));
+        }
+    }
+    React.useEffect(() => {
+        getFilms();
+    }, [film])
+
+    return (
+        <Box sx={{bgcolor: "bgPrimary.main"}} alignItems={'center'}>
+            <Typography display={'flex'} mx={2} py={3} variant={'h4'}>
+                {"Similar Films"}
+            </Typography>
+            <Carousel sx={{mx: 3}} navButtonsAlwaysVisible>
+                {groupByN(3, similarFilms).map((films: Film[]) => (
+                    <FilmSimpleList films={films}/>
+                ))}
+            </Carousel>
+        </Box>
+
+    )
+}
 const FilmTitle = (params: {film: Film}) => {
     const film = params.film
     return (
@@ -22,20 +62,43 @@ const FilmTitle = (params: {film: Film}) => {
     )
 }
 
+export const FilmSimpleList = (params: {films : Film[]}) => {
+    return (
+        <Box sx={{ mx: 3, justifyItems: 'center', display: "grid", gridAutoRows: 'auto', gridTemplateColumns: {xs: "repeat(2, minmax(0, 1fr))", sm: "repeat(3, minmax(0, 1fr))"}}}>
+            {params.films.map((film: Film) => (
+                <FilmSimple film={film}/>
+            ))}
+        </Box>
+    )
+}
+
 export const FilmSimple = (params: {film: Film}) => {
     const film = params.film;
 
     return (
-        <Card>
-            <CardMedia
-                sx={{ height: 140 }}
-                image={BASE_URL + "/films/" + film.filmId + "/image"}
-                title={film.title}
-            />
-            <CardContent>
-                <FilmTitle film={film}/>
-            </CardContent>
-        </Card>
+        <Box sx={{height: "90%", width: "80%"}}>
+            <RouterLink style={{textDecoration: 'none'}} to={`/film/${film.filmId}`}>
+                <Card sx={{height: "100%"}}>
+                    <CardMedia
+                        sx={{ height: 140 }}
+                        image={BASE_URL + "/films/" + film.filmId + "/image"}
+                        title={film.title}
+                    />
+                    <CardContent>
+                        <Box display={'flex'} justifyContent={"space-between"}>
+                            <FilmTitle film={film}/>
+                            <Box display={'flex'}>
+                                <Typography variant={'h4'}>
+                                    {film.rating}
+                                </Typography>
+                                <Star sx={{color: 'gold', fontSize:'35px'}}/>
+                            </Box>
+                        </Box>
+
+                    </CardContent>
+                </Card>
+            </RouterLink>
+        </Box>
     )
 }
 
@@ -56,7 +119,7 @@ export const FilmDetailed = (props : {film: Film}) => {
                         maxWidth: '300px'
                     }}
                     src={BASE_URL + "/films/" + film.filmId + "/image"}
-                    alt="random"
+                    alt={film.title}
                 />
 
                 {/* Rating */}

@@ -7,12 +7,12 @@ import {
     CardActions,
     CardContent,
     Container,
-    Grid, InputLabel, MenuItem, Pagination, Paper, Select, SelectChangeEvent, Stack,
+    Grid, InputLabel, MenuItem, Pagination, Select, SelectChangeEvent, Stack,
     Typography
 } from "@mui/material";
 import {BASE_URL} from "../index";
-import {SearchContext} from "../Contexts/search-context";
-import {Link as RouterLink} from "react-router-dom";
+import {SearchContext} from "../contexts/search-context";
+import {FilmSimpleList} from "../components/FilmComponents";
 
 
 const Films = () => {
@@ -28,7 +28,7 @@ const Films = () => {
     const [currentPage, setCurrentPage] = React.useState (1);
     const [numPages, setnumPages] = React.useState (0);
 
-    const numPerPage = 10;
+    const numPerPage = 9;
     const ageRatings = ["G", "PG", "M", "R13", "R16", "R18", "TBC"]
     const sortBy = new Map();
     sortBy.set("ALPHABETICAL_ASC", "A-Z");
@@ -99,46 +99,10 @@ const Films = () => {
 
         <Container sx={{ py: 8 }} maxWidth="lg">
             <Grid container spacing={2}>
-                <Grid item xs={8}>
-                    <Stack spacing={4}>
-                        {films.map((film : Film) => (
-                            <RouterLink style={{textDecoration: 'none'}} to={`/film/${film.filmId}`}>
-                                <Paper elevation={3}>
-                                    <Grid container alignItems="center" justifyContent="center">
-                                        <Grid item xs={2}>
-                                            <Box
-                                                component="img"
-                                                sx={{
-                                                    height: 'auto',
-                                                    width: '100%',
-                                                }}
-                                                src={BASE_URL + "/films/" + film.filmId + "/image"}
-                                                alt="FilmComponents image"
-                                            />
-                                        </Grid>
-                                        <Grid item xs={8}>
-                                            <Typography variant={'h5'}>
-                                                {film.title}
-                                            </Typography>
-                                            <Typography variant={'subtitle1'}>
-                                                {film.directorFirstName + " " + film.directorLastName}
-                                            </Typography>
-                                            <Typography variant={'subtitle1'}>
-                                                {new Date(film.releaseDate).getFullYear()}
-                                            </Typography>
-                                        </Grid>
-                                        <Grid item xs={2}>
-                                            <Typography variant={'h3'}>
-                                                {film.rating}
-                                            </Typography>
-                                        </Grid>
-                                    </Grid>
-                                </Paper>
-                            </RouterLink>
-                        ))}
-                    </Stack>
+                <Grid item xs={12} sm={8}>
+                    <FilmSimpleList films={films}/>
                 </Grid>
-                <Grid item xs={4}>
+                <Grid item xs={12} sm={4}>
                     <Card elevation={2}>
                         <CardContent>
                             <Typography>
