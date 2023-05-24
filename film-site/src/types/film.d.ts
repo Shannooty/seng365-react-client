@@ -1,6 +1,6 @@
 type Film = {
     /**
-     * Film id as defined by the database
+     * FilmComponents id as defined by the database
      */
     filmId: number,
 

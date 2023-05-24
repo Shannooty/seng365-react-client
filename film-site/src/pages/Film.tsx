@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import ErrorPage from "./Error";
 import {defaultFilm} from "../defaults/defaults";
-import {FilmDetailed} from "../components/FilmDetailed";
+import {FilmDetailed} from "../components/FilmComponents";
 import {ReviewList} from "../components/Review";
 
 const Film = () => {
@@ -17,7 +17,7 @@ const Film = () => {
     const { id } = useParams();
     const url = BASE_URL + "/films/" + id;
     const [film, setFilm] = useState<Film>(defaultFilm);
-    const [errorFlag, setErrorFlag] = useState(false);
+    const [errorFlag, setErrorFlag] = useState(true);
     const [errorMessage, setErrorMessage] = React.useState("");
 
     const getFilm = () => {
@@ -50,6 +50,11 @@ const Film = () => {
                 <Box>
                     <Container sx={{ py: 4, mx: "auto" }} maxWidth="lg">
                         <ReviewList filmId={film.filmId} errorFlag setErrorFlag={setErrorFlag}/>
+                    </Container>
+                </Box>
+                <Box>
+                    <Container sx={{ py: 4, mx: "auto" }} maxWidth="lg">
+
                     </Container>
                 </Box>
             </Stack>

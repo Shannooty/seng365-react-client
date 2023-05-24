@@ -113,7 +113,7 @@ const Films = () => {
                                                     width: '100%',
                                                 }}
                                                 src={BASE_URL + "/films/" + film.filmId + "/image"}
-                                                alt="Film image"
+                                                alt="FilmComponents image"
                                             />
                                         </Grid>
                                         <Grid item xs={8}>

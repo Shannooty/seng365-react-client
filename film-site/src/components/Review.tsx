@@ -11,14 +11,15 @@ export const ReviewList = (params : {filmId: number, errorFlag: boolean, setErro
     const url = BASE_URL + "/films/" + params.filmId;
     const [reviews, setReviews] = useState<Review[]>([]);
     const [reviewOpen, setReviewOpen] = React.useState(false);
+    const [errorFlag, setErrorFlag] = useState(false);
 
     const getReviews = () => {
         axios.get(url + "/reviews")
             .then((response) => {
-                params.setErrorFlag(false)
+                setErrorFlag(false)
                 setReviews(response.data)
             }, () => {
-                params.setErrorFlag(true)
+                setErrorFlag(true)
             })
     }
     const handleReviews = () => {
@@ -27,7 +28,7 @@ export const ReviewList = (params : {filmId: number, errorFlag: boolean, setErro
 
     React.useEffect(() => {
         getReviews()
-    }, [params.errorFlag])
+    }, [errorFlag])
 
     return (
         <Box>

@@ -1,26 +1,50 @@
-import React from "react";
+import {Box, Card, CardContent, CardMedia, Divider, List, ListItem, Stack, Typography} from "@mui/material";
 import {BASE_URL} from "../index";
-import {Box, Divider, List, ListItem, Stack, Typography} from "@mui/material";
 import {FiberManualRecord, Star} from "@mui/icons-material";
+import React from "react";
 import {UserSmall} from "./UserSmall";
 
-const FilmDetailed = (props : {film: Film}) => {
+const FilmTitle = (params: {film: Film}) => {
+    const film = params.film
+    return (
+        <Box display={'flex'} gap={3} flexWrap={'wrap'} alignItems={'center'} alignContent={'flex-end'}>
+            <Typography color={"primary"} variant={'h3'}>
+                {film.title}
+            </Typography>
+            <FiberManualRecord/>
+            <Typography color={"primary"} variant={'h3'}>
+                {film.ageRating}
+            </Typography>
+            <Typography color={"secondary"} variant={'h4'}>
+                {"(" + new Date(film.releaseDate).getFullYear() + ")"}
+            </Typography>
+        </Box>
+    )
+}
+
+export const FilmSimple = (params: {film: Film}) => {
+    const film = params.film;
+
+    return (
+        <Card>
+            <CardMedia
+                sx={{ height: 140 }}
+                image={BASE_URL + "/films/" + film.filmId + "/image"}
+                title={film.title}
+            />
+            <CardContent>
+                <FilmTitle film={film}/>
+            </CardContent>
+        </Card>
+    )
+}
+
+export const FilmDetailed = (props : {film: Film}) => {
     const film = props.film;
     return (
         <Stack gap={3}>
             {/*Title*/}
-            <Box display={'flex'} gap={3} flexWrap={'wrap'} alignItems={'center'} alignContent={'flex-end'}>
-                <Typography color={"primary"} variant={'h3'}>
-                    {film.title}
-                </Typography>
-                <FiberManualRecord/>
-                <Typography color={"primary"} variant={'h3'}>
-                    {film.ageRating}
-                </Typography>
-                <Typography color={"secondary"} variant={'h4'}>
-                    {"(" + new Date(film.releaseDate).getFullYear() + ")"}
-                </Typography>
-            </Box>
+            <FilmTitle film={film}/>
 
             {/*Hero image and rating*/}
             <Box display={'flex'} gap={5} flexWrap={'wrap'} justifyContent={'flex-start'} alignItems={'center'}>
@@ -58,7 +82,7 @@ const FilmDetailed = (props : {film: Film}) => {
                 </Stack>
             </Box>
 
-            {/* Film info */}
+            {/* FilmComponents info */}
             <List>
 
                 <Divider orientation={'horizontal'}/>
@@ -85,5 +109,3 @@ const FilmDetailed = (props : {film: Film}) => {
         </Stack>
     )
 }
-
-export {FilmDetailed}
