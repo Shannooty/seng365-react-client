@@ -9,7 +9,7 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import {isLoggedIn, login, register, uploadImage} from "../services/UserService";
+import {isLoggedIn, login, register} from "../services/UserService";
 import {IconButton} from "@mui/material";
 import {AddAPhoto, Visibility, VisibilityOff} from "@mui/icons-material";
 import apiClient from "../defaults/axios-config";
@@ -37,7 +37,7 @@ export default function SignUp(params : {setOpenLogin: Function}) {
             setInvalidImage(true);
             return;
         }
-        const registerResponse = await register(data.get('firstName'), data.get('lastName'), data.get('email'),  data.get('password'));
+        const registerResponse = await register(data.get('firstName'), data.get('lastName'), data.get('email'),  data.get('password'), image);
 
         setEmailInUse(false);
         setInvalidFirst(false);
@@ -48,7 +48,6 @@ export default function SignUp(params : {setOpenLogin: Function}) {
         switch (registerResponse.status) {
             case 201:
                 await login(data.get('email'),  data.get('password'));
-                await uploadImage(image);
                 window.location.href = '/';
                 break;
             case 400:

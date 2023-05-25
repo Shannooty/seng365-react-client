@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 import {SearchContext} from "../contexts/search-context";
 import {FilmSimpleList} from "../components/FilmComponents";
+import {ageRatings, getGenres} from "../services/FilmService";
 
 
 const Films = () => {
@@ -29,7 +30,6 @@ const Films = () => {
     const [numPages, setnumPages] = React.useState (0);
 
     const numPerPage = 9;
-    const ageRatings = ["G", "PG", "M", "R13", "R16", "R18", "TBC"]
     const sortBy = new Map();
     sortBy.set("ALPHABETICAL_ASC", "A-Z");
     sortBy.set("ALPHABETICAL_DESC", "Z-A");
@@ -82,16 +82,13 @@ const Films = () => {
             })
     }
 
-    const getGenres = async () => {
-        await apiClient.get('/films/genres')
-            .then((response) => {
-                setGenres(response.data)
-            })
-    }
-
     React.useEffect(() => {
         getFilms();
-        getGenres();
+        getGenres().then((genres) => {
+            if (genres instanceof Array<Genre>) {
+                setGenres(genres);
+            }
+        });
     }, [currentPage, searchTerm])
 
     return (

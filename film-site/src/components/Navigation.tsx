@@ -1,17 +1,31 @@
 import React, {ChangeEvent} from "react";
-import {AppBar, Avatar, Box, Button, Container, IconButton, InputBase, Paper, Toolbar, Typography} from "@mui/material";
-import {Search} from "@mui/icons-material";
+import {
+    AppBar,
+    Avatar,
+    Box,
+    Button,
+    Container,
+    Grid,
+    IconButton,
+    InputBase,
+    Paper,
+    Toolbar,
+    Typography
+} from "@mui/material";
+import {Search, VideoCall} from "@mui/icons-material";
 import {SearchContext} from "../contexts/search-context";
 import {Link as RouterLink} from "react-router-dom";
 import {isLoggedIn, logout} from "../services/UserService";
 import {deepOrange} from "@mui/material/colors";
 import apiClient from "../defaults/axios-config";
+import {CreateFilm} from "./CreateFilm";
 
 
 
 const Navbar = (params: {setOpenLogin: Function}) => {
 
     const {searchTerm, setSearchTerm} = React.useContext(SearchContext)
+    const [open, setOpen] = React.useState(false);
     const updateSearchTerm = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setSearchTerm(event.target.value);
     }
@@ -21,6 +35,10 @@ const Navbar = (params: {setOpenLogin: Function}) => {
     }
     const handleLogoutButton = async () => {
         await logout();
+    }
+
+    function handleCreateFilm() {
+        setOpen(true);
     }
 
     return (
@@ -44,19 +62,26 @@ const Navbar = (params: {setOpenLogin: Function}) => {
                     <Box>
                         {isLoggedIn() ?
                             (
-                                <Box display={'inline-flex'}>
+                                <Grid display={'inline-flex'} gap={2}>
+                                    <Button variant="contained" aria-label="new-movie" onClick={handleCreateFilm}>
+                                        <VideoCall/>
+                                    </Button>
                                     <Avatar
                                         src={apiClient.defaults.baseURL + "/users/" + localStorage.getItem("userId") + "/image"}
-                                        sx={{ bgcolor: deepOrange[500], width: "60px", height: "60px" }}
+                                        sx={{ bgcolor: deepOrange[500], width: "50px", height: "50px" }}
                                     />
                                     <Button href='/' variant="contained" onClick={handleLogoutButton}>Logout</Button>
-                                </Box>
+                                </Grid>
                             )
                             :
-                            (<Button id="login" variant="contained" onClick={handleLoginButton}>Login</Button>)}
+                            (<Box display={'inline-flex'}>
+                                <Button id="login" variant="contained" onClick={handleLoginButton}>Login</Button>
+                            </Box>
+                            )}
                     </Box>
                 </Toolbar>
             </Container>
+            <CreateFilm open={open} setOpen={setOpen}/>
         </AppBar>
     )
 }

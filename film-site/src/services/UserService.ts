@@ -23,7 +23,7 @@ export const logout = async () => {
     }
 }
 
-export const register = async (firstName: FormDataEntryValue | null, lastName: FormDataEntryValue | null, email: FormDataEntryValue | null, password: FormDataEntryValue | null) => {
+export const register = async (firstName: FormDataEntryValue | null, lastName: FormDataEntryValue | null, email: FormDataEntryValue | null, password: FormDataEntryValue | null, image: File) => {
     try {
         const response = await apiClient.post("/users/register", {
             email: email,
@@ -31,6 +31,7 @@ export const register = async (firstName: FormDataEntryValue | null, lastName: F
             lastName: lastName,
             password: password
         })
+        await uploadImage(image);
         return response;
     } catch (error: AxiosError | any) {
         return error.response;
@@ -48,7 +49,7 @@ export const isLoggedIn = () => {
     return apiClient.defaults.headers['X-Authorization'];
 }
 
-export const uploadImage = async (image: File) => {
+const uploadImage = async (image: File) => {
     try {
         return await apiClient.put(`/users/${localStorage.getItem("userId")}/image`, image, {headers: {
                 'Content-Type': image.type}});
