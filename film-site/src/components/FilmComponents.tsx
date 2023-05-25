@@ -3,7 +3,7 @@ import {FiberManualRecord, Star} from "@mui/icons-material";
 import React from "react";
 import {UserSmall} from "./UserSmall";
 import Carousel from "react-material-ui-carousel";
-import apiClient from "../services/axios-config";
+import apiClient from "../defaults/axios-config";
 import {Link as RouterLink} from "react-router-dom";
 
 export const SimilarFilms = (params : {film: Film}) => {
@@ -76,7 +76,7 @@ export const FilmSimple = (params: {film: Film}) => {
 
     return (
         <Box sx={{height: "90%", width: "80%"}}>
-            <RouterLink style={{textDecoration: 'none'}} to={`/film/${film.filmId}`}>
+            <RouterLink style={{textDecoration: 'none'}} to={`/films/${film.filmId}`}>
                 <Card sx={{height: "100%"}}>
                     <CardMedia
                         sx={{ height: 140 }}

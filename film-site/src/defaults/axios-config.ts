@@ -6,11 +6,15 @@ const apiClient = () => {
         baseURL: BASE_URL,
         headers: {
             "Content-Type": "application/json",
-            "X-Authorization": "",
+            "X-Authorization": setAuth(),
         }
     };
 
     return axios.create(defaultOptions);
 };
+
+const setAuth = () => {
+    return localStorage.getItem("X-Authorization") ? localStorage.getItem("X-Authorization") : '';
+}
 
 export default apiClient();

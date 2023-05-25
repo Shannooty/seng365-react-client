@@ -10,19 +10,24 @@ import {
 } from "@mui/material";
 import {Lock as LockIcon} from "@mui/icons-material";
 import React from "react";
-import {login} from "../services/UserService";
+import {isLoggedIn, login} from "../services/UserService";
 
 export const SignIn = (params : {open : boolean, setOpenLogin: Function}) => {
 
     const [hasErrors, setHasErrors] = React.useState(false);
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+        if (isLoggedIn()) {
+            return;
+        }
         const data = new FormData(event.currentTarget);
         const response = await login(data.get('email'), data.get('password'))
 
         if (response !== 200) {
             params.setOpenLogin(true);
             setHasErrors(true);
+        } else {
+            window.location.href = '/';
         }
     };
 
@@ -97,9 +102,9 @@ export const SignIn = (params : {open : boolean, setOpenLogin: Function}) => {
                                     </Button>
                                     <Grid container>
                                         <Grid item>
-                                            <Link href="#" variant="body2">
+                                            <Button href={`/register`}>
                                                 {"Don't have an account? Sign Up"}
-                                            </Link>
+                                            </Button>
                                         </Grid>
                                     </Grid>
                                 </Box>

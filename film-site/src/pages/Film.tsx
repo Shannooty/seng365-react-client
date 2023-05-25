@@ -1,6 +1,6 @@
 import {useParams} from "react-router-dom";
 import React, {useEffect, useState} from "react";
-import apiClient from "../services/axios-config";
+import apiClient from "../defaults/axios-config";
 
 import {
     Box,

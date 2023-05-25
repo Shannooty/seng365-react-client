@@ -1,5 +1,5 @@
 import React, {ChangeEvent} from "react";
-import apiClient from "../services/axios-config";
+import apiClient from "../defaults/axios-config";
 
 import {
     Box,

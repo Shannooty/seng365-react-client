@@ -2,7 +2,7 @@ import {Avatar, Box, Typography} from "@mui/material";
 import {deepOrange} from "@mui/material/colors";
 import React from "react";
 import {defaultUser} from "../defaults/defaults";
-import apiClient from "../services/axios-config";
+import apiClient from "../defaults/axios-config";
 
 const UserSmall = (params : {userId: number}) => {
     const userId = params.userId;

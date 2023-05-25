@@ -5,6 +5,7 @@ import {SearchContext} from "../contexts/search-context";
 import {Link as RouterLink} from "react-router-dom";
 import {isLoggedIn, logout} from "../services/UserService";
 import {deepOrange} from "@mui/material/colors";
+import apiClient from "../defaults/axios-config";
 
 
 
@@ -44,12 +45,15 @@ const Navbar = (params: {setOpenLogin: Function}) => {
                         {isLoggedIn() ?
                             (
                                 <Box display={'inline-flex'}>
-                                    <Avatar sx={{ bgcolor: deepOrange[500], width: "60px", height: "60px" }}/>
+                                    <Avatar
+                                        src={apiClient.defaults.baseURL + "/users/" + localStorage.getItem("userId") + "/image"}
+                                        sx={{ bgcolor: deepOrange[500], width: "60px", height: "60px" }}
+                                    />
                                     <Button href='/' variant="contained" onClick={handleLogoutButton}>Logout</Button>
                                 </Box>
                             )
                             :
-                            (<Button variant="contained" onClick={handleLoginButton}>Login</Button>)}
+                            (<Button id="login" variant="contained" onClick={handleLoginButton}>Login</Button>)}
                     </Box>
                 </Toolbar>
             </Container>

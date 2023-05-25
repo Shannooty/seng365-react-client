@@ -2,7 +2,7 @@ import {Avatar, Box, ButtonBase, Collapse, Divider, Grid, List, ListItem, Paper,
 import React, {useState} from "react";
 import {UserSmall} from "./UserSmall";
 import {ExpandLess, ExpandMore, Star} from "@mui/icons-material";
-import apiClient from "../services/axios-config";
+import apiClient from "../defaults/axios-config";
 
 
 export const ReviewList = (params : {filmId: number, errorFlag: boolean, setErrorFlag: (arg0: boolean) => void}) => {

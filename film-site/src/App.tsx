@@ -9,7 +9,8 @@ import {theme} from "./theme";
 import {SearchContext} from "./contexts/search-context";
 import Film from "./pages/Film";
 import {SignIn} from "./components/SignIn";
-import SignUp from "./components/SingUp";
+import SignUp from "./pages/SignUp";
+import {isLoggedIn} from "./services/UserService";
 
 
 function App() {
@@ -24,7 +25,7 @@ function App() {
                       <Navbar setOpenLogin={setOpenLogin}/>
                       <SignIn open={openLogin} setOpenLogin={setOpenLogin}/>
                       <Routes>
-                          <Route path="/register" element={<SignUp/>}/>
+                          <Route path="/register" element={<SignUp setOpenLogin={setOpenLogin}/>}/>
                           <Route path="/films" element={<Films/>}/>
                           <Route path="/films/:id" element={<Film/>}/>
                           <Route path="*" element={<NotFound/>}/>
