@@ -9,6 +9,7 @@ import {theme} from "./theme";
 import {SearchContext} from "./contexts/search-context";
 import Film from "./pages/Film";
 import {SignIn} from "./components/SignIn";
+import SignUp from "./components/SingUp";
 
 
 function App() {
@@ -23,9 +24,10 @@ function App() {
                       <Navbar setOpenLogin={setOpenLogin}/>
                       <SignIn open={openLogin} setOpenLogin={setOpenLogin}/>
                       <Routes>
-                      <Route path="/films" element={<Films/>}/>
-                      <Route path="/film/:id" element={<Film/>}/>
-                      <Route path="*" element={<NotFound/>}/>
+                          <Route path="/register" element={<SignUp/>}/>
+                          <Route path="/films" element={<Films/>}/>
+                          <Route path="/films/:id" element={<Film/>}/>
+                          <Route path="*" element={<NotFound/>}/>
                   </Routes>
                   </SearchContext.Provider>
               </Router>

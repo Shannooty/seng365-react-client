@@ -39,7 +39,6 @@ const Films = () => {
     sortBy.set("RATING_ASC", "Lowest Rated");
 
 
-
     const handleGenre = (event: SelectChangeEvent<string[]>) => {
         // @ts-ignore
         setSelectedGenres(event.target.value);

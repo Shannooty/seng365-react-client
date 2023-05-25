@@ -12,11 +12,21 @@ export const login = async (email: FormDataEntryValue | null, password: FormData
     }
 }
 
+export const logout = async () => {
+    try {
+        await apiClient.post(`/users/logout`)
+        attachTokenToRequest();
+        return 200
+    } catch {
+        return 401
+    }
+}
 const attachTokenToRequest = (token = null, userId = null) => {
-    apiClient.defaults.headers['Authorization'] = token ? `Bearer ${token}` : '';
-    apiClient.defaults.headers['UserId'] = userId ? `Bearer ${userId}` : '';
+    apiClient.defaults.headers['X-Authorization'] = token ? `${token}` : '';
+    localStorage.setItem("userId", userId ? `${userId}` : '');
 }
 
 export const isLoggedIn = () => {
-    return apiClient.defaults.headers['UserId'];
+    console.log(apiClient.defaults.headers['X-Authorization'])
+    return apiClient.defaults.headers['X-Authorization'] !== '';
 }

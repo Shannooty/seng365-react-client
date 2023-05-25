@@ -6,6 +6,7 @@ const apiClient = () => {
         baseURL: BASE_URL,
         headers: {
             "Content-Type": "application/json",
+            "X-Authorization": "",
         }
     };
 
