@@ -4,10 +4,8 @@ import {
     DialogContent,
     DialogTitle, FormControl,
     FormHelperText,
-    Grid, InputLabel,
+    InputLabel,
     MenuItem,
-    Modal,
-    Paper,
     Select, SelectChangeEvent,
     Stack,
     Typography
@@ -20,16 +18,20 @@ import dayjs, {Dayjs} from "dayjs";
 import {AddAPhoto} from "@mui/icons-material";
 import Button from "@mui/material/Button";
 import {ChangeEvent} from "react";
-import {ageRatings, createFilm, getGenres} from "../services/FilmService";
-import {login} from "../services/UserService";
+import {ageRatings, createFilm, getFilm, getGenres, updateFilm} from "../services/FilmService";
+import {useNavigate} from "react-router-dom";
 
-export const CreateFilm = (params: {open: boolean, setOpen: Function}) => {
+export const FilmForm = (params: {open: boolean, setOpen: Function, edit: Boolean, filmId: number}) => {
 
+    const navigate = useNavigate();
     const [genres, setGenres] = React.useState < Array < Genre >> ([]);
     const [selectedGenre, setSelectedGenre] = React.useState('');
     const [selectedAgeRating, setSelectedAgeRating] = React.useState ('TBC');
-    const [selectedDate, setSelectedDate] = React.useState(dayjs().add(1,'day').toDate());
+    const [selectedDate, setSelectedDate] = React.useState(dayjs().add(1,'day'));
     const [imageName, setImageName] = React.useState('');
+    const [title, setTitle] = React.useState('');
+    const [description, setDescription] = React.useState('');
+    const [runtime, setRuntime] = React.useState('');
     const [invalidImage, setInvalidImage] = React.useState(false);
     const [invalidTitle, setInvalidTitle] = React.useState(false);
     const [invalidDescription, setInvalidDescription] = React.useState(false);
@@ -46,25 +48,39 @@ export const CreateFilm = (params: {open: boolean, setOpen: Function}) => {
 
         setInvalidImage(false);
         const image = (data.get("image") as File)
-        if (!data.get("image")|| !allowedFiles.includes(image.type)) {
-            setInvalidImage(true);
-            return;
+        const date = selectedDate.add(13, 'hours').toISOString().replace("T", " ").split('.')[0]
+        let filmResponse;
+        if (params.edit) {
+            if (image.size > 0 && !allowedFiles.includes(image.type)) {
+                console.log(data.get("image"))
+                setInvalidImage(true);
+                return;
+            }
+            filmResponse = await updateFilm(data.get('title'), data.get('description'), selectedGenre, date, selectedAgeRating, parseInt(data.get('runtime') as string), image.size > 0 ? image : null, params.filmId);
+        } else {
+            if (image.size === 0 || !allowedFiles.includes(image.type)) {
+                setInvalidImage(true);
+                return;
+            }
+            filmResponse = await createFilm(data.get('title'), data.get('description'), selectedGenre, date, selectedAgeRating, parseInt(data.get('runtime') as string), image);
         }
-        const date = selectedDate.toISOString().replace("T", " ").split('.')[0]
-        const createFilmResponse = await createFilm(data.get('title'), data.get('description'), selectedGenre, date, selectedAgeRating, parseInt(data.get('runtime') as string), image);
 
         setInvalidTitle(false);
         setInvalidDescription(false);
         setInvalidGenre(false);
         setInvalidRuntime(false);
 
-        switch (createFilmResponse.status) {
+        switch (filmResponse.status) {
+            case 200:
+                navigate(0);
+                handleClose();
+                break;
             case 201:
-                window.location.href = `/films/${createFilmResponse.data.filmId}`;
+                navigate(`/films/${filmResponse.data.filmId}`);
+                handleClose();
                 break;
             case 400:
-                const statusMessage: string = createFilmResponse.statusText;
-                console.log(statusMessage)
+                const statusMessage: string = filmResponse.statusText;
 
                 if (statusMessage.includes("title")) {
                     setInvalidTitle(true);
@@ -105,7 +121,7 @@ export const CreateFilm = (params: {open: boolean, setOpen: Function}) => {
 
     function handleDate(day: Dayjs | null) {
         if (day) {
-            setSelectedDate(day.toDate());
+            setSelectedDate(day);
         }
     }
 
@@ -117,8 +133,19 @@ export const CreateFilm = (params: {open: boolean, setOpen: Function}) => {
                 }
             });
         }
+        if (params.edit) {
+            getFilm(params.filmId).then((response) => {
+                setSelectedDate(dayjs(response.data.releaseDate));
+                setSelectedGenre(response.data.genreId);
+                setSelectedAgeRating(response.data.ageRating);
+                setTitle(response.data.title);
+                setDescription(response.data.description);
+                setRuntime(response.data.runtime);
+                console.log(selectedDate)
+            })
+        }
 
-    }, [imageName])
+    }, [imageName, params.open])
 
     return (
         <Dialog
@@ -126,11 +153,12 @@ export const CreateFilm = (params: {open: boolean, setOpen: Function}) => {
             onClose={handleClose}
             fullWidth
         >
-            <DialogTitle>Create Film</DialogTitle>
+            <DialogTitle>{params.edit ? "Edit Film" : "Create Film"}</DialogTitle>
             <DialogContent>
                 <Stack component="form" noValidate onSubmit={handleSubmit} py={1} spacing={2}>
                     <TextField
                         error={invalidTitle}
+                        defaultValue={title}
                         name="title"
                         required
                         fullWidth
@@ -141,6 +169,7 @@ export const CreateFilm = (params: {open: boolean, setOpen: Function}) => {
                     />
                     <TextField
                         error={invalidDescription}
+                        defaultValue={description}
                         name="description"
                         multiline
                         minRows={2}
@@ -183,10 +212,11 @@ export const CreateFilm = (params: {open: boolean, setOpen: Function}) => {
                         </Select>
                     </FormControl>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DatePicker onChange={handleDate} label={"Release Date"} minDate={dayjs().add(1,'day')} defaultValue={dayjs().add(1,'day')}/>
+                        <DatePicker onChange={handleDate} label={"Release Date"} minDate={dayjs().add(1,'day')} defaultValue={selectedDate}/>
                     </LocalizationProvider>
                     <TextField
                         error={invalidRuntime}
+                        defaultValue={runtime}
                         name="runtime"
                         required
                         fullWidth
@@ -220,7 +250,7 @@ export const CreateFilm = (params: {open: boolean, setOpen: Function}) => {
                         variant="contained"
                         sx={{py: 1}}
                     >
-                        Create Film
+                        {params.edit ? "Update Film" : "Create Film"}
                     </Button>
                 </Stack>
             </DialogContent>

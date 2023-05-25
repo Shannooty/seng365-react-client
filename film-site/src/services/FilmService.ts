@@ -40,3 +40,41 @@ export const createFilm = async (title: FormDataEntryValue | null, description: 
         return error.response;
     }
 }
+
+export const updateFilm = async (title: FormDataEntryValue | null, description: FormDataEntryValue | null, genre: string, releaseDate: string, rating: string, runtime: number, image: FormDataEntryValue | null, filmId: number) => {
+    try {
+        const response = await apiClient.patch("/films/" + filmId, {
+            title: title,
+            description: description,
+            genreId: genre,
+            releaseDate: releaseDate,
+            runtime: runtime,
+            ageRating: rating
+        })
+        if (image) {
+            const imageres = await uploadImage(image as File, filmId);
+            if (imageres.status !== 200 && imageres.status !== 201) {
+                return imageres;
+            }
+        }
+        return response;
+    } catch (error: AxiosError | any) {
+        return error.response;
+    }
+}
+
+export const getFilm = async (filmId: number | string | undefined) => {
+    try {
+        return await apiClient.get(`films/${filmId}`);
+    } catch (error: AxiosError | any) {
+        return error.response;
+    }
+}
+
+export const deleteFilm = async (filmId: number | string | undefined) => {
+    try {
+        return await apiClient.delete(`films/${filmId}`);
+    } catch (error: AxiosError | any) {
+        return error.response;
+    }
+}

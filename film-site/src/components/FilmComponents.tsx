@@ -1,10 +1,25 @@
-import {Box, Card, CardContent, CardMedia, Divider, List, ListItem, Stack, Typography} from "@mui/material";
+import {
+    Box,
+    Button,
+    Card,
+    CardContent,
+    CardMedia,
+    Dialog, DialogContent, DialogTitle,
+    Divider,
+    List,
+    ListItem,
+    Stack,
+    Typography
+} from "@mui/material";
 import {FiberManualRecord, Star} from "@mui/icons-material";
 import React from "react";
 import {UserSmall} from "./UserSmall";
 import Carousel from "react-material-ui-carousel";
 import apiClient from "../defaults/axios-config";
-import {Link as RouterLink} from "react-router-dom";
+import {Link as RouterLink, useNavigate} from "react-router-dom";
+import {FilmForm} from "./FilmForm";
+import dayjs from "dayjs";
+import {deleteFilm} from "../services/FilmService";
 
 export const SimilarFilms = (params : {film: Film}) => {
     const film = params.film;
@@ -103,6 +118,9 @@ export const FilmSimple = (params: {film: Film}) => {
 
 export const FilmDetailed = (props : {film: Film}) => {
     const film = props.film;
+    const [openEdit, setOpenEdit] = React.useState(false);
+    const [openDelete, setOpenDelete] = React.useState(false);
+
     return (
         <Stack gap={3}>
             {/*Title*/}
@@ -146,7 +164,21 @@ export const FilmDetailed = (props : {film: Film}) => {
 
             {/* FilmComponents info */}
             <List>
-
+                {film.directorId.toString() === localStorage.getItem("userId") && dayjs(film.releaseDate) > dayjs() ? (
+                        <><Divider orientation={'horizontal'}/>
+                            <ListItem>
+                                <Box display={'inline-flex'} gap={2}>
+                                    <Button variant={'contained'} onClick={() => {setOpenEdit(true)}}>Edit Film</Button>
+                                    <FilmForm open={openEdit} setOpen={setOpenEdit} edit={true} filmId={film.filmId}/>
+                                    <Button variant={'contained'} color={'error'} onClick={() => {setOpenDelete(true)}}>Delete Film</Button>
+                                    <DeleteFilm filmId={film.filmId} open={openDelete} setOpen={setOpenDelete}/>
+                                </Box>
+                            </ListItem></>
+                    )
+                    :
+                    (
+                        <Box/>
+                    )}
                 <Divider orientation={'horizontal'}/>
                 <ListItem>
                     <Typography width={'100%'} variant={'h4'} fontWeight='bold'>
@@ -169,5 +201,35 @@ export const FilmDetailed = (props : {film: Film}) => {
                 </ListItem>
             </List>
         </Stack>
+    )
+}
+
+const DeleteFilm = (params: {filmId : number, open: boolean, setOpen: Function}) => {
+
+    const navigate = useNavigate();
+    function handleClose() {
+        params.setOpen(false);
+    }
+
+    const handleDelete= async () => {
+        await deleteFilm(params.filmId)
+        handleClose();
+        navigate('/');
+    }
+
+    return (
+        <Dialog
+            open={params.open}
+            onClose={handleClose}>
+            <DialogTitle>
+                Confirm Delete Film
+            </DialogTitle>
+            <DialogContent>
+                <Box display={'inline-flex'} gap={2}>
+                    <Button onClick={handleDelete} color={'error'} variant={'contained'}>Delete Film</Button>
+                    <Button onClick={handleClose} variant={'contained'}>Cancel</Button>
+                </Box>
+            </DialogContent>
+        </Dialog>
     )
 }

@@ -11,17 +11,17 @@ import ErrorPage from "./Error";
 import {defaultFilm} from "../defaults/defaults";
 import {FilmDetailed, SimilarFilms} from "../components/FilmComponents";
 import {ReviewList} from "../components/Review";
+import {getFilm} from "../services/FilmService";
 
 const Film = () => {
 
     const { id } = useParams();
-    const url = "/films/" + id;
     const [film, setFilm] = useState<Film>(defaultFilm);
     const [errorFlag, setErrorFlag] = useState(true);
     const [errorMessage, setErrorMessage] = React.useState("");
 
-    const getFilm = async () => {
-        const response = await apiClient.get(url);
+    const getTheFilm = async () => {
+        const response = await getFilm(id);
 
         if (response.status === 200) {
             setErrorFlag(false)
@@ -33,7 +33,7 @@ const Film = () => {
     }
 
     useEffect(() => {
-        getFilm()
+        getTheFilm()
     }, [errorFlag])
 
     if (errorFlag) {

@@ -18,7 +18,7 @@ import {Link as RouterLink} from "react-router-dom";
 import {isLoggedIn, logout} from "../services/UserService";
 import {deepOrange} from "@mui/material/colors";
 import apiClient from "../defaults/axios-config";
-import {CreateFilm} from "./CreateFilm";
+import {FilmForm} from "./FilmForm";
 
 
 
@@ -81,7 +81,7 @@ const Navbar = (params: {setOpenLogin: Function}) => {
                     </Box>
                 </Toolbar>
             </Container>
-            <CreateFilm open={open} setOpen={setOpen}/>
+            <FilmForm open={open} setOpen={setOpen} edit={false} filmId={0}/>
         </AppBar>
     )
 }
