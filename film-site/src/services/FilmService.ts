@@ -65,7 +65,7 @@ export const updateFilm = async (title: FormDataEntryValue | null, description: 
 
 export const getFilm = async (filmId: number | string | undefined) => {
     try {
-        return await apiClient.get(`films/${filmId}`);
+        return await apiClient.get(`/films/${filmId}`);
     } catch (error: AxiosError | any) {
         return error.response;
     }
@@ -73,7 +73,15 @@ export const getFilm = async (filmId: number | string | undefined) => {
 
 export const deleteFilm = async (filmId: number | string | undefined) => {
     try {
-        return await apiClient.delete(`films/${filmId}`);
+        return await apiClient.delete(`/films/${filmId}`);
+    } catch (error: AxiosError | any) {
+        return error.response;
+    }
+}
+
+export const getFilms = async (params = '') => {
+    try {
+        return await apiClient.get(`/films${params}`);
     } catch (error: AxiosError | any) {
         return error.response;
     }

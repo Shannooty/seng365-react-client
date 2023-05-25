@@ -51,4 +51,9 @@ type Film = {
      * Average user rating
      */
     rating: number;
+
+    /**
+     * num reviews
+     */
+    numReviews: number;
 }

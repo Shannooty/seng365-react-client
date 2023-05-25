@@ -1,18 +1,18 @@
 import {
     Box,
     Button,
-    Card,
+    Card, CardActions,
     CardContent,
-    CardMedia,
+    CardMedia, Container,
     Dialog, DialogContent, DialogTitle,
-    Divider,
+    Divider, Grid,
     List,
-    ListItem,
+    ListItem, Pagination,
     Stack,
     Typography
 } from "@mui/material";
 import {FiberManualRecord, Star} from "@mui/icons-material";
-import React from "react";
+import React, {ChangeEvent} from "react";
 import {UserSmall} from "./UserSmall";
 import Carousel from "react-material-ui-carousel";
 import apiClient from "../defaults/axios-config";
@@ -20,6 +20,7 @@ import {Link as RouterLink, useNavigate} from "react-router-dom";
 import {FilmForm} from "./FilmForm";
 import dayjs from "dayjs";
 import {deleteFilm} from "../services/FilmService";
+import films from "../pages/Films";
 
 export const SimilarFilms = (params : {film: Film}) => {
     const film = params.film;
@@ -76,13 +77,62 @@ const FilmTitle = (params: {film: Film}) => {
     )
 }
 
-export const FilmSimpleList = (params: {films : Film[]}) => {
+export const FilmSimpleList = (params: {films: Film[]}) => {
     return (
-        <Box sx={{ mx: 3, justifyItems: 'center', display: "grid", gridAutoRows: 'auto', gridTemplateColumns: {xs: "repeat(2, minmax(0, 1fr))", sm: "repeat(3, minmax(0, 1fr))"}}}>
-            {params.films.map((film: Film) => (
-                <FilmSimple film={film}/>
-            ))}
-        </Box>
+        <Container sx={{ py: 8 }} maxWidth="md">
+            <Grid container spacing={4}>
+                {params.films.map((film: Film) => (
+                    <Grid item key={film.filmId} xs={12} sm={6} md={4}>
+                        <FilmSimple film={film}/>
+                    </Grid>
+                ))}
+            </Grid>
+        </Container>
+    )
+}
+
+export const FilmQueryList = (params: {query: string}) => {
+
+    const [films, setFilms] = React.useState<Array<Film>>([]);
+    const [currentPage, setCurrentPage] = React.useState (1);
+    const [numPages, setnumPages] = React.useState (0);
+
+    const numPerPage = 9;
+    const handlePagination = async (event: ChangeEvent<unknown>, value : number) => {
+        setCurrentPage(value)
+    }
+
+    const getFilmsList = async () => {
+
+        let count = `count=${numPerPage}&`
+        let startIndex = `startIndex=${(currentPage - 1) * numPerPage}&`
+
+        const query = "/films" + "?" + params.query + count + startIndex;
+
+        apiClient.get(query)
+            .then((response) => {
+                setFilms(response.data.films)
+                setnumPages(Math.ceil(response.data.count / numPerPage));
+            })
+    }
+
+    React.useEffect(() => {
+        getFilmsList();
+    }, [currentPage])
+
+    return (
+        <Container sx={{ py: 8 }} maxWidth="md">
+            <Grid container spacing={4}>
+                {films.map((film: Film) => (
+                    <Grid item key={film.filmId} xs={12} sm={6} md={4}>
+                        <FilmSimple film={film}/>
+                    </Grid>
+                ))}
+            </Grid>
+            <Stack sx={{ py: 4 }} alignItems="center">
+                <Pagination size={'large'} count={numPages} page={currentPage} onChange={handlePagination} shape="rounded" />
+            </Stack>
+        </Container>
     )
 }
 
@@ -90,29 +140,31 @@ export const FilmSimple = (params: {film: Film}) => {
     const film = params.film;
 
     return (
-        <Box sx={{height: "90%", width: "80%"}}>
-            <RouterLink style={{textDecoration: 'none'}} to={`/films/${film.filmId}`}>
-                <Card sx={{height: "100%"}}>
-                    <CardMedia
-                        sx={{ height: 140 }}
-                        image={apiClient.defaults.baseURL + "/films/" + film.filmId + "/image"}
-                        title={film.title}
-                    />
-                    <CardContent>
-                        <Box display={'flex'} justifyContent={"space-between"}>
-                            <FilmTitle film={film}/>
-                            <Box display={'flex'}>
-                                <Typography variant={'h4'}>
-                                    {film.rating}
-                                </Typography>
-                                <Star sx={{color: 'gold', fontSize:'35px'}}/>
-                            </Box>
+        <RouterLink style={{textDecoration: 'none'}} to={`/films/${film.filmId}`}>
+            <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+                <CardMedia
+                    component="div"
+                    sx={{
+                        // 16:9
+                        pt: '56.25%',
+                    }}
+                    image={apiClient.defaults.baseURL + "/films/" + film.filmId + "/image"}
+                    title={film.title}
+                />
+                <CardContent sx={{ flexGrow: 1 }}>
+                    <Box display={'flex'} justifyContent={"space-between"}>
+                        <FilmTitle film={film}/>
+                        <Box display={'flex'}>
+                            <Typography variant={'h4'}>
+                                {film.rating}
+                            </Typography>
+                            <Star sx={{color: 'gold', fontSize:'35px'}}/>
                         </Box>
+                    </Box>
 
-                    </CardContent>
-                </Card>
-            </RouterLink>
-        </Box>
+                </CardContent>
+            </Card>
+        </RouterLink>
     )
 }
 
@@ -164,12 +216,19 @@ export const FilmDetailed = (props : {film: Film}) => {
 
             {/* FilmComponents info */}
             <List>
-                {film.directorId.toString() === localStorage.getItem("userId") && dayjs(film.releaseDate) > dayjs() ? (
+                {film.directorId.toString() === localStorage.getItem("userId") ? (
                         <><Divider orientation={'horizontal'}/>
                             <ListItem>
                                 <Box display={'inline-flex'} gap={2}>
-                                    <Button variant={'contained'} onClick={() => {setOpenEdit(true)}}>Edit Film</Button>
-                                    <FilmForm open={openEdit} setOpen={setOpenEdit} edit={true} filmId={film.filmId}/>
+                                    {dayjs(film.releaseDate) <= dayjs() || film.numReviews > 0 ? (<Box/>) :
+                                        (
+                                            <Box>
+                                                <Button variant={'contained'} onClick={() => {setOpenEdit(true)}}>Edit Film</Button>
+                                                <FilmForm open={openEdit} setOpen={setOpenEdit} edit={true} filmId={film.filmId}/>
+                                            </Box>
+
+                                        )
+                                    }
                                     <Button variant={'contained'} color={'error'} onClick={() => {setOpenDelete(true)}}>Delete Film</Button>
                                     <DeleteFilm filmId={film.filmId} open={openDelete} setOpen={setOpenDelete}/>
                                 </Box>

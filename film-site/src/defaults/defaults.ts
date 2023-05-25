@@ -8,7 +8,9 @@ const defaultFilm = {
     rating: 0,
     releaseDate: "",
     title: "",
-    filmId:0};
+    filmId:0,
+    numReviews:0,
+};
 
 const defaultUser = {email: "", firstName: "", lastName: ""}
 
