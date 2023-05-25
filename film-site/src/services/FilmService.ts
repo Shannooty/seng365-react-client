@@ -81,7 +81,7 @@ export const deleteFilm = async (filmId: number | string | undefined) => {
 
 export const getFilms = async (params = '') => {
     try {
-        return await apiClient.get(`/films${params}`);
+        return await apiClient.get(`/films?${params}`);
     } catch (error: AxiosError | any) {
         return error.response;
     }

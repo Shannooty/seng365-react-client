@@ -12,8 +12,6 @@ export const MyFilms = () => {
         navigate('/');
     }
 
-    const [searchParams, setSearchParams] = useSearchParams();
-
 
     return (
         <Container sx={{ py: 8 }} maxWidth="lg">

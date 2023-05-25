@@ -1,8 +1,6 @@
 import React from "react";
 import {
-    Box,
-    Button,
-    CardActions, FormControl,
+    Button, FormControl,
     InputLabel,
     MenuItem,
     Paper,
@@ -17,8 +15,9 @@ import {SearchContext} from "../contexts/search-context";
 
 export const Filters = (params: {setQuery: Function}) => {
 
-    const {searchTerm} = React.useContext(SearchContext);
-
+    const [query, setQuery] = React.useState('');
+    const [filters, setFilters] = React.useState('');
+    const {searchTerm, setSearchTerm} = React.useContext(SearchContext);
     const [genres, setGenres] = React.useState < Array < Genre >> ([]);
     const [selectedAgeRatings, setSelectedAgeRatings] = React.useState <string[]> ([]);
     const [selectedGenres, setSelectedGenres] = React.useState <string[]> ([]);
@@ -37,18 +36,23 @@ export const Filters = (params: {setQuery: Function}) => {
         updateFilters();
     }
 
+    const updateSearchParams = () => {
+        const searchParam = searchTerm === '' ? '' : `q=${searchTerm}&`
+        setQuery(searchParam + filters);
+    }
+
     const updateFilters = () => {
-        let query = `sortBy=${selectedSort}&`;
+        let filterParams = `sortBy=${selectedSort}&`;
 
         for (const genreId of selectedGenres) {
-            query += `genreIds=${genreId}&`;
+            filterParams += `genreIds=${genreId}&`;
         }
 
         for (const ageRating of selectedAgeRatings) {
-            query += `ageRatings=${ageRating}&`
+            filterParams += `ageRatings=${ageRating}&`
         }
 
-        params.setQuery(query);
+        setFilters(filterParams);
     }
 
     const handleGenre = (event: SelectChangeEvent<string[]>) => {
@@ -78,7 +82,15 @@ export const Filters = (params: {setQuery: Function}) => {
     React.useEffect(() => {
         setSelects();
         updateFilters();
-    }, [searchTerm])
+    }, [])
+
+    React.useEffect(() => {
+        updateSearchParams();
+    }, [searchTerm, filters])
+
+    React.useEffect(() => {
+        params.setQuery(query);
+    },[query])
 
     return (
         <Paper elevation={2}>
