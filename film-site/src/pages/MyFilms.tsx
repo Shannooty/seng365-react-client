@@ -1,7 +1,7 @@
 import {FilmQueryList} from "../components/FilmComponents";
 import React from "react";
 import {Container, Grid, Typography} from "@mui/material";
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useSearchParams} from "react-router-dom";
 import {isLoggedIn} from "../services/UserService";
 
 export const MyFilms = () => {
@@ -11,6 +11,9 @@ export const MyFilms = () => {
     if (!isLoggedIn()) {
         navigate('/');
     }
+
+    const [searchParams, setSearchParams] = useSearchParams();
+
 
     return (
         <Container sx={{ py: 8 }} maxWidth="lg">

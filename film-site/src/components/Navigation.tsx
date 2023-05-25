@@ -45,11 +45,20 @@ const Navbar = (params: {setOpenLogin: Function}) => {
         <AppBar position="static">
             <Container maxWidth="xl">
                 <Toolbar sx={{ justifyContent: "space-between" }}>
-                    <Box></Box>
+                    {isLoggedIn() ?
+                        <RouterLink to={"/myfilms"}>
+                            <Button variant={'contained'}>
+                                My Films
+                            </Button>
+                        </RouterLink>
+                        :
+                        <></>
+                    }
                     <Paper sx={{borderRadius: "30px",  width: '50%', display:'flex', alignItems: 'center'}}>
                         <InputBase
                             sx={{ ml: 1, flex: 1 }}
-                            placeholder={searchTerm === '' ? "Search Films" : searchTerm}
+                            placeholder={searchTerm === '' ? "Search Films" : ""}
+                            value={searchTerm}
                             inputProps={{ 'aria-label': 'search films' }}
                             onChange={updateSearchTerm}
                         />
@@ -71,12 +80,17 @@ const Navbar = (params: {setOpenLogin: Function}) => {
                                         sx={{ bgcolor: deepOrange[500], width: "50px", height: "50px" }}
                                     />
                                     <Button href='/' variant="contained" onClick={handleLogoutButton}>Logout</Button>
+                                    <RouterLink to={"/myfilms"}>
+                                        <Button variant={'contained'}>
+                                            My Films
+                                        </Button>
+                                    </RouterLink>
                                 </Grid>
                             )
                             :
-                            (<Box display={'inline-flex'}>
+                            (<Grid display={'inline-flex'}>
                                 <Button id="login" variant="contained" onClick={handleLoginButton}>Login</Button>
-                            </Box>
+                            </Grid>
                             )}
                     </Box>
                 </Toolbar>

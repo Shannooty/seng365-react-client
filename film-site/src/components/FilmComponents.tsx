@@ -16,11 +16,12 @@ import React, {ChangeEvent} from "react";
 import {UserSmall} from "./UserSmall";
 import Carousel from "react-material-ui-carousel";
 import apiClient from "../defaults/axios-config";
-import {Link as RouterLink, useNavigate} from "react-router-dom";
+import {Link as RouterLink, useNavigate, useSearchParams} from "react-router-dom";
 import {FilmForm} from "./FilmForm";
 import dayjs from "dayjs";
 import {deleteFilm} from "../services/FilmService";
 import films from "../pages/Films";
+import {SearchContext} from "../contexts/search-context";
 
 export const SimilarFilms = (params : {film: Film}) => {
     const film = params.film;
@@ -93,6 +94,9 @@ export const FilmSimpleList = (params: {films: Film[]}) => {
 
 export const FilmQueryList = (params: {query: string}) => {
 
+    const navigate = useNavigate();
+    const {searchTerm, setSearchTerm} = React.useContext(SearchContext);
+    const [searchParams, setSearchParams] = useSearchParams();
     const [films, setFilms] = React.useState<Array<Film>>([]);
     const [currentPage, setCurrentPage] = React.useState (1);
     const [numPages, setnumPages] = React.useState (0);
@@ -102,23 +106,37 @@ export const FilmQueryList = (params: {query: string}) => {
         setCurrentPage(value)
     }
 
-    const getFilmsList = async () => {
+    const getFilmsList = () => {
+        if (searchParams.get('q') && (!searchTerm || searchTerm === '')) {
+            setSearchTerm(searchParams.get('q') as string)
+        }
 
+        const searchParam = searchTerm === '' ? '' : `q=${searchTerm}&`
         let count = `count=${numPerPage}&`
-        let startIndex = `startIndex=${(currentPage - 1) * numPerPage}&`
+        let startIndex = `startIndex=${(currentPage - 1) * numPerPage}`
 
-        const query = "/films" + "?" + params.query + count + startIndex;
+        const query = searchParam + params.query + count + startIndex;
 
-        apiClient.get(query)
-            .then((response) => {
-                setFilms(response.data.films)
-                setnumPages(Math.ceil(response.data.count / numPerPage));
-            })
+        setSearchParams(query);
     }
 
     React.useEffect(() => {
-        getFilmsList();
-    }, [currentPage])
+        if (params.query !== '') {
+            getFilmsList();
+        }
+    }, [currentPage, searchTerm, params.query])
+
+    React.useEffect(() => {
+        console.log(searchParams)
+        if (Array.of(searchParams).length !== 0) {
+            apiClient.get('/films?' + searchParams.toString())
+                .then((response) => {
+                    setFilms(response.data.films)
+                    setnumPages(Math.ceil(response.data.count / numPerPage));
+                })
+        }
+
+    }, [searchParams])
 
     return (
         <Container sx={{ py: 8 }} maxWidth="md">
