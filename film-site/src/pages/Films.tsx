@@ -1,5 +1,6 @@
 import React, {ChangeEvent} from "react";
-import axios from "axios";
+import apiClient from "../services/axios-config";
+
 import {
     Box,
     Button,
@@ -10,13 +11,12 @@ import {
     Grid, InputLabel, MenuItem, Pagination, Select, SelectChangeEvent, Stack,
     Typography
 } from "@mui/material";
-import {BASE_URL} from "../index";
 import {SearchContext} from "../contexts/search-context";
 import {FilmSimpleList} from "../components/FilmComponents";
 
 
 const Films = () => {
-    const url = BASE_URL + "/films"
+    const url = "/films"
 
     const {searchTerm} = React.useContext(SearchContext);
 
@@ -76,7 +76,7 @@ const Films = () => {
 
         const query = url + "?" + searchParam + genreParams + ageParams + sortParams + count + startIndex;
 
-        axios.get(query)
+        apiClient.get(query)
             .then((response) => {
                 setFilms(response.data.films)
                 setnumPages(Math.ceil(response.data.count / numPerPage));
@@ -84,7 +84,7 @@ const Films = () => {
     }
 
     const getGenres = async () => {
-        await axios.get(url + '/genres')
+        await apiClient.get('/films/genres')
             .then((response) => {
                 setGenres(response.data)
             })

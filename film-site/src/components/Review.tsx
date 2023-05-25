@@ -1,20 +1,19 @@
 import {Avatar, Box, ButtonBase, Collapse, Divider, Grid, List, ListItem, Paper, Typography} from "@mui/material";
-import {BASE_URL} from "../index";
 import React, {useState} from "react";
 import {UserSmall} from "./UserSmall";
 import {ExpandLess, ExpandMore, Star} from "@mui/icons-material";
-import axios from "axios";
+import apiClient from "../services/axios-config";
 
 
 export const ReviewList = (params : {filmId: number, errorFlag: boolean, setErrorFlag: (arg0: boolean) => void}) => {
 
-    const url = BASE_URL + "/films/" + params.filmId;
+    const url = "/films/" + params.filmId;
     const [reviews, setReviews] = useState<Review[]>([]);
     const [reviewOpen, setReviewOpen] = React.useState(false);
     const [errorFlag, setErrorFlag] = useState(false);
 
     const getReviews = () => {
-        axios.get(url + "/reviews")
+        apiClient.get(url + "/reviews")
             .then((response) => {
                 setErrorFlag(false)
                 setReviews(response.data)

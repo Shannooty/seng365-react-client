@@ -1,15 +1,22 @@
 import React, {ChangeEvent} from "react";
-import {AppBar, Box, Container, IconButton, InputBase, Paper, Toolbar} from "@mui/material";
+import {AppBar, Avatar, Box, Button, Container, IconButton, InputBase, Paper, Toolbar, Typography} from "@mui/material";
 import {Search} from "@mui/icons-material";
 import {SearchContext} from "../contexts/search-context";
 import {Link as RouterLink} from "react-router-dom";
+import {isLoggedIn} from "../services/UserService";
+import {deepOrange} from "@mui/material/colors";
 
 
-const Navbar = () => {
+
+const Navbar = (params: {setOpenLogin: Function}) => {
 
     const {searchTerm, setSearchTerm} = React.useContext(SearchContext)
     const updateSearchTerm = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setSearchTerm(event.target.value);
+    }
+
+    const handleLoginButton = () => {
+        params.setOpenLogin(true);
     }
 
     return (
@@ -30,7 +37,10 @@ const Navbar = () => {
                             </IconButton>
                         </RouterLink>
                     </Paper>
-                    <Box></Box>
+                    <Box>
+                        {isLoggedIn() ? (<Avatar sx={{ bgcolor: deepOrange[500], width: "60px", height: "60px" }}/>)
+                            : (<Button variant="contained" onClick={handleLoginButton}>Login</Button>)}
+                    </Box>
                 </Toolbar>
             </Container>
         </AppBar>

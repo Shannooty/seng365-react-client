@@ -1,10 +1,9 @@
 import {Box, Card, CardContent, CardMedia, Divider, List, ListItem, Stack, Typography} from "@mui/material";
-import {BASE_URL} from "../index";
 import {FiberManualRecord, Star} from "@mui/icons-material";
 import React from "react";
 import {UserSmall} from "./UserSmall";
 import Carousel from "react-material-ui-carousel";
-import axios from "axios";
+import apiClient from "../services/axios-config";
 import {Link as RouterLink} from "react-router-dom";
 
 export const SimilarFilms = (params : {film: Film}) => {
@@ -16,8 +15,8 @@ export const SimilarFilms = (params : {film: Film}) => {
         return result;
     };
     const getFilms = async () => {
-        const similarGenresFilms = await axios.get(BASE_URL + `/films?genreIds=${film.genreId}`)
-        const similarDirectorFilms = await axios.get(BASE_URL + `/films?directorId=${film.directorId}`)
+        const similarGenresFilms = await apiClient.get(`/films?genreIds=${film.genreId}`)
+        const similarDirectorFilms = await apiClient.get(`/films?directorId=${film.directorId}`)
 
         if (similarGenresFilms.status === 200 && similarDirectorFilms.status === 200) {
             const similarGenresFilmIds = similarGenresFilms.data.films.map((film: Film) => (film.filmId))
@@ -81,7 +80,7 @@ export const FilmSimple = (params: {film: Film}) => {
                 <Card sx={{height: "100%"}}>
                     <CardMedia
                         sx={{ height: 140 }}
-                        image={BASE_URL + "/films/" + film.filmId + "/image"}
+                        image={apiClient.defaults.baseURL + "/films/" + film.filmId + "/image"}
                         title={film.title}
                     />
                     <CardContent>
@@ -118,7 +117,7 @@ export const FilmDetailed = (props : {film: Film}) => {
                         width: '100%',
                         maxWidth: '300px'
                     }}
-                    src={BASE_URL + "/films/" + film.filmId + "/image"}
+                    src={apiClient.defaults.baseURL + "/films/" + film.filmId + "/image"}
                     alt={film.title}
                 />
 

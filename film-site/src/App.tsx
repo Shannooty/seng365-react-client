@@ -8,24 +8,26 @@ import { ThemeProvider } from '@emotion/react';
 import {theme} from "./theme";
 import {SearchContext} from "./contexts/search-context";
 import Film from "./pages/Film";
+import {SignIn} from "./components/SignIn";
+
 
 function App() {
     const [searchTerm, setSearchTerm] = React.useState('');
+    const [openLogin, setOpenLogin] = React.useState(false);
 
   return (
       <ThemeProvider theme={theme}>
           <div className="App">
               <Router>
-                  <div>
-                      <SearchContext.Provider value={{searchTerm, setSearchTerm}}>
-                          <Navbar/>
-                          <Routes>
-                              <Route path="/films" element={<Films/>}/>
-                              <Route path="/film/:id" element={<Film/>}/>
-                              <Route path="*" element={<NotFound/>}/>
-                          </Routes>
-                      </SearchContext.Provider>
-                  </div>
+                  <SearchContext.Provider value={{searchTerm, setSearchTerm}}>
+                      <Navbar setOpenLogin={setOpenLogin}/>
+                      <SignIn open={openLogin} setOpenLogin={setOpenLogin}/>
+                      <Routes>
+                      <Route path="/films" element={<Films/>}/>
+                      <Route path="/film/:id" element={<Film/>}/>
+                      <Route path="*" element={<NotFound/>}/>
+                  </Routes>
+                  </SearchContext.Provider>
               </Router>
           </div>
       </ThemeProvider>

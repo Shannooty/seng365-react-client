@@ -1,7 +1,7 @@
 import {useParams} from "react-router-dom";
 import React, {useEffect, useState} from "react";
-import {BASE_URL} from "../index";
-import axios from "axios";
+import apiClient from "../services/axios-config";
+
 import {
     Box,
     Container,
@@ -15,20 +15,21 @@ import {ReviewList} from "../components/Review";
 const Film = () => {
 
     const { id } = useParams();
-    const url = BASE_URL + "/films/" + id;
+    const url = "/films/" + id;
     const [film, setFilm] = useState<Film>(defaultFilm);
     const [errorFlag, setErrorFlag] = useState(true);
     const [errorMessage, setErrorMessage] = React.useState("");
 
-    const getFilm = () => {
-        axios.get(url)
-            .then((response) => {
-                setErrorFlag(false)
-                setFilm(response.data)
-            }, (error) => {
-                setErrorFlag(true);
-                setErrorMessage(error.toString());
-            })
+    const getFilm = async () => {
+        const response = await apiClient.get(url);
+
+        if (response.status === 200) {
+            setErrorFlag(false)
+            setFilm(response.data)
+        } else {
+            setErrorFlag(true);
+            setErrorMessage(response.status.toString());
+        }
     }
 
     useEffect(() => {
@@ -42,7 +43,7 @@ const Film = () => {
     return (
         <Box>
             <Stack spacing={3}>
-                <Box sx={{zIndex: 'modal', bgcolor: "bgPrimary.main"}}>
+                <Box sx={{bgcolor: "bgPrimary.main"}}>
                     <Container sx={{ py: 8, mx: "auto" }} maxWidth="lg">
                         <FilmDetailed film={film}/>
                     </Container>
