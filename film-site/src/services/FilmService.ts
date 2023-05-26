@@ -21,6 +21,11 @@ export const getGenres = async () => {
     }
 }
 
+export const getGenre = async (film : Film) => {
+    const genres = await getGenres();
+    return genres.filter((genre: Genre) => genre.genreId === film.genreId)[0]
+}
+
 export const createFilm = async (title: FormDataEntryValue | null, description: FormDataEntryValue | null, genre: string, releaseDate: string, rating: string, runtime: number, image: File) => {
     try {
         const response = await apiClient.post("/films", {

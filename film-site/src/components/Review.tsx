@@ -1,16 +1,4 @@
-import {
-    Avatar,
-    Box, Button,
-    ButtonBase,
-    Collapse,
-    Divider,
-    Grid,
-    IconButton,
-    List,
-    ListItem,
-    Paper,
-    Typography
-} from "@mui/material";
+import {Box, Button, ButtonBase, Collapse, Divider, List, Paper, Typography} from "@mui/material";
 import React, {useState} from "react";
 import {UserSmall} from "./UserSmall";
 import {Add, ExpandLess, ExpandMore, Star} from "@mui/icons-material";
@@ -18,7 +6,6 @@ import apiClient from "../defaults/axios-config";
 import {getUserId, isLoggedIn} from "../services/UserService";
 import {ReviewDialog} from "./Forms";
 import dayjs from "dayjs";
-import film from "../pages/Film";
 
 
 export const ReviewList = (params : {film: Film, errorFlag: boolean, setErrorFlag: Function, setLoginOpen: Function}) => {
@@ -83,7 +70,7 @@ export const ReviewList = (params : {film: Film, errorFlag: boolean, setErrorFla
             </Box>
             <Collapse sx={{bgcolor: "bgPrimary.main"}} in={reviewOpen} timeout="auto" unmountOnExit>
                 {reviews.map((review: Review) => {
-                    return(<SingleReview review={review}/>)
+                    return(<SingleReview key={review.reviewerId} review={review}/>)
                 })}
             </Collapse>
         </Box>
@@ -103,9 +90,9 @@ export const SingleReview = (params: {review: Review}) => {
                     </Typography>
 
                 </Box>
-                {review.review ? (<Typography variant={'h5'} sx={{py: 2}}>
-                                        {review.review}
-                                    </Typography>) : ""}
+                {review.review ? (<><Divider sx={{py: 1}} orientation={'horizontal'}/><Typography variant={'h5'} sx={{py: 2}}>
+                    {review.review}
+                </Typography></>) : ""}
             </List>
         </Paper>
     )

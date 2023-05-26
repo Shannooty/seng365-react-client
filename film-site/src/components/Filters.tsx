@@ -1,6 +1,7 @@
 import React from "react";
 import {
-    Button, FormControl,
+    Button,
+    FormControl,
     InputLabel,
     MenuItem,
     Paper,
@@ -10,7 +11,6 @@ import {
     Typography
 } from "@mui/material";
 import {ageRatings, getGenres} from "../services/FilmService";
-import {useNavigate} from "react-router-dom";
 import {SearchContext} from "../contexts/search-context";
 
 export const Filters = (params: {setQuery: Function}) => {

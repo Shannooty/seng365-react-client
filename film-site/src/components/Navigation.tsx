@@ -1,17 +1,5 @@
 import React, {ChangeEvent} from "react";
-import {
-    AppBar,
-    Avatar,
-    Box,
-    Button,
-    Container,
-    Grid,
-    IconButton,
-    InputBase,
-    Paper,
-    Toolbar,
-    Typography
-} from "@mui/material";
+import {AppBar, Avatar, Box, Button, Container, Grid, IconButton, InputBase, Paper, Toolbar} from "@mui/material";
 import {Search, VideoCall} from "@mui/icons-material";
 import {SearchContext} from "../contexts/search-context";
 import {Link as RouterLink, useNavigate} from "react-router-dom";
@@ -19,7 +7,6 @@ import {getUserId, isLoggedIn, logout} from "../services/UserService";
 import {deepOrange} from "@mui/material/colors";
 import apiClient from "../defaults/axios-config";
 import {FilmForm} from "./Forms";
-
 
 
 const Navbar = (params: {setOpenLogin: Function}) => {

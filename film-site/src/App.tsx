@@ -2,15 +2,14 @@ import React from 'react';
 import './App.css';
 import Films from "./pages/Films";
 import NotFound from "./pages/NotFound";
-import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
+import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
 import Navbar from "./components/Navigation";
-import { ThemeProvider } from '@emotion/react';
+import {ThemeProvider} from '@emotion/react';
 import {theme} from "./theme";
 import {SearchContext} from "./contexts/search-context";
 import Film from "./pages/Film";
 import {SignIn} from "./components/SignIn";
 import SignUp from "./pages/SignUp";
-import {isLoggedIn} from "./services/UserService";
 import {MyFilms} from "./pages/MyFilms";
 import {ProfilePage} from "./pages/ProfilePage";
 

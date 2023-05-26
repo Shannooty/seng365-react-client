@@ -1,12 +1,7 @@
 import {useParams} from "react-router-dom";
-import React, {useEffect, useState} from "react";
-import apiClient from "../defaults/axios-config";
+import React, {useState} from "react";
 
-import {
-    Box,
-    Container,
-    Stack
-} from "@mui/material";
+import {Box, Container, Stack} from "@mui/material";
 import ErrorPage from "./Error";
 import {defaultFilm} from "../defaults/defaults";
 import {FilmDetailed, SimilarFilms} from "../components/FilmComponents";
@@ -32,9 +27,13 @@ const Film = (params: {setLoginOpen: Function}) => {
         }
     }
 
-    useEffect(() => {
+    React.useEffect(() => {
         getTheFilm()
     }, [id])
+
+    React.useEffect(() => {
+        document.title = `${film.title}`;
+    }, [id, film]);
 
     if (errorFlag) {
         return <ErrorPage errorMessage={errorMessage}/>

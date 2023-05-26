@@ -2,28 +2,32 @@ import {
     Box,
     Dialog,
     DialogContent,
-    DialogTitle, FormControl,
-    FormHelperText, IconButton,
+    DialogTitle,
+    FormControl,
+    FormHelperText,
+    IconButton,
     InputLabel,
     MenuItem,
-    Select, SelectChangeEvent, Slider,
+    Select,
+    SelectChangeEvent,
+    Slider,
     Stack,
     Typography
 } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import * as React from "react";
+import {ChangeEvent} from "react";
 import {DatePicker, LocalizationProvider} from "@mui/x-date-pickers";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs, {Dayjs} from "dayjs";
 import {AddAPhoto, Star, Visibility, VisibilityOff} from "@mui/icons-material";
 import Button from "@mui/material/Button";
-import {ChangeEvent} from "react";
 import {ageRatings, createFilm, createReview, getFilm, getGenres, updateFilm} from "../services/FilmService";
 import {useNavigate} from "react-router-dom";
 import Avatar from "@mui/material/Avatar";
 import {deepOrange} from "@mui/material/colors";
 import Grid from "@mui/material/Grid";
-import {editUser, login, logout, register} from "../services/UserService";
+import {editUser} from "../services/UserService";
 
 export const FilmForm = (params: {open: boolean, setOpen: Function, edit: Boolean, filmId: number}) => {
 
@@ -343,7 +347,6 @@ export const ReviewDialog = (params: {open: boolean, setOpen: Function, filmId: 
 
 export const EditProfileForm = (params : {open: boolean, setOpen: Function, user: User}) => {
 
-    const navigate = useNavigate();
     const [invalidFirst, setInvalidFirst] = React.useState(false);
     const [invalidLast, setInvalidLast] = React.useState(false);
     const [invalidEmail, setInvalidEmail] = React.useState(false);

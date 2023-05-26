@@ -1,13 +1,18 @@
 import {
     Box,
     Button,
-    Card, CardActions,
+    Card,
     CardContent,
-    CardMedia, Container,
-    Dialog, DialogContent, DialogTitle,
-    Divider, Grid,
+    CardMedia,
+    Container,
+    Dialog,
+    DialogContent,
+    DialogTitle,
+    Divider,
+    Grid,
     List,
-    ListItem, Pagination,
+    ListItem,
+    Pagination,
     Stack,
     Typography
 } from "@mui/material";
@@ -16,17 +21,19 @@ import React, {ChangeEvent} from "react";
 import {UserSmall} from "./UserSmall";
 import Carousel from "react-material-ui-carousel";
 import apiClient from "../defaults/axios-config";
-import {Link as RouterLink, useNavigate, useSearchParams} from "react-router-dom";
+import {Link as RouterLink, useNavigate} from "react-router-dom";
 import {FilmForm} from "./Forms";
 import dayjs from "dayjs";
-import {deleteFilm, getFilms} from "../services/FilmService";
-import films from "../pages/Films";
-import {SearchContext} from "../contexts/search-context";
-import {getUserId, logout} from "../services/UserService";
+import {deleteFilm, getFilms, getGenre} from "../services/FilmService";
+
+import {getUserId} from "../services/UserService";
 
 export const SimilarFilms = (params : {film: Film}) => {
     const film = params.film;
     const [similarFilms, setSimilarFilms] = React.useState< Array<Film>>([])
+
+    const [numArry, setNumArry] = React.useState< IterableIterator<[number, number]>>([1].entries())
+
     let groupByN = (n : number, arr : Film[]) => {
         let result = [];
         for (let i = 0; i < arr.length; i += n) result.push(arr.slice(i, i + n));
@@ -42,6 +49,12 @@ export const SimilarFilms = (params : {film: Film}) => {
             const combinedFilms = [...filmList, ...similarGenresFilms.data.films]
             setSimilarFilms(combinedFilms.filter((similarFilm: Film) => similarFilm.filmId !== film.filmId));
         }
+        let result = []
+        for (let i = 0; i < (similarFilms.length / 3) + 1; i ++) {
+            result.push(i);
+        }
+        setNumArry(result.entries())
+
     }
     React.useEffect(() => {
         getFilms();
@@ -54,7 +67,7 @@ export const SimilarFilms = (params : {film: Film}) => {
             </Typography>
             <Carousel sx={{mx: 3}} navButtonsAlwaysVisible>
                 {groupByN(3, similarFilms).map((films: Film[]) => (
-                    <FilmSimpleList films={films}/>
+                    <FilmSimpleList key={numArry.next().value} films={films}/>
                 ))}
             </Carousel>
         </Box>
@@ -95,7 +108,6 @@ export const FilmSimpleList = (params: {films: Film[]}) => {
 
 export const FilmQueryList = (params: {query: string}) => {
 
-    const navigate = useNavigate();
     const [films, setFilms] = React.useState<Array<Film>>(new Array<Film>);
     const [currentPage, setCurrentPage] = React.useState (1);
     const [numPages, setNumPages] = React.useState (0);
@@ -143,6 +155,17 @@ export const FilmQueryList = (params: {query: string}) => {
 
 export const FilmSimple = (params: {film: Film}) => {
     const film = params.film;
+    const [genre, setGenre] = React.useState('')
+
+    const setUpGenre = async () => {
+        const genreReq = await getGenre(film);
+        setGenre(genreReq.name);
+    }
+
+    React.useEffect(() => {
+        setUpGenre()
+
+    },[])
 
     return (
         <RouterLink style={{textDecoration: 'none'}} to={`/films/${film.filmId}`}>
@@ -151,20 +174,27 @@ export const FilmSimple = (params: {film: Film}) => {
                     component="div"
                     sx={{
                         // 16:9
-                        pt: '56.25%',
+                        pt: '100%',
                     }}
                     image={apiClient.defaults.baseURL + "/films/" + film.filmId + "/image"}
                     title={film.title}
                 />
                 <CardContent sx={{ flexGrow: 1 }}>
-                    <Box display={'flex'} justifyContent={"space-between"}>
-                        <FilmTitle film={film}/>
-                        <Box display={'flex'}>
+                    <Box display={'flex-wrap'} justifyContent={"space-between"}>
+                        <Typography variant={'h5'}>{film.title}</Typography>
+                        <Typography variant={'h6'}>{genre}</Typography>
+                        <Box display={'flex'} gap={2} justifyContent={'center'}>
+                            <Typography variant={'h6'}>{"(" + new Date(film.releaseDate).getFullYear() + ")"}</Typography>
+                            <Typography variant={'h6'}>{film.ageRating}</Typography>
+                        </Box>
+                        <Box display={'flex'} justifyContent={'center'}>
                             <Typography variant={'h4'}>
                                 {film.rating}
                             </Typography>
                             <Star sx={{color: 'gold', fontSize:'35px'}}/>
                         </Box>
+                        <UserSmall userId={film.directorId}/>
+
                     </Box>
 
                 </CardContent>

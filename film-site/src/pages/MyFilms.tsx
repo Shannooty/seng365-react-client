@@ -1,7 +1,7 @@
 import {FilmQueryList} from "../components/FilmComponents";
 import React from "react";
 import {Container, Grid, Typography} from "@mui/material";
-import {useNavigate, useSearchParams} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import {getUserId, isLoggedIn} from "../services/UserService";
 
 export const MyFilms = () => {
@@ -12,8 +12,8 @@ export const MyFilms = () => {
         if (!isLoggedIn()) {
             navigate('/');
         }
+        document.title = 'My Films';
     }, [])
-
 
     return (
         <Container sx={{ py: 8 }} maxWidth="lg">

@@ -1,7 +1,5 @@
 import Container from "@mui/material/Container";
-import Box from "@mui/material/Box";
 import Avatar from "@mui/material/Avatar";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
 import {getUser, getUserId, isLoggedIn, logout} from "../services/UserService";
@@ -39,6 +37,10 @@ export const ProfilePage = () => {
     function handleEditButton() {
         setOpenEditForm(true);
     }
+
+    React.useEffect(() => {
+        document.title = `${user.firstName}'s Profile`;
+    }, [user]);
 
     return (
         <Container component="main" maxWidth="xs">
