@@ -5,7 +5,7 @@ import React from "react";
 export  const HomePage = () => {
 
     React.useEffect(() => {
-        document.title = `iMDB Home`;
+        document.title = `eMDB Home`;
     }, []);
 
     return (

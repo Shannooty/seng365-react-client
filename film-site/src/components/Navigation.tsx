@@ -88,16 +88,16 @@ const Navbar = (params: {setOpenLogin: Function}) => {
                         {isLoggedIn() ?
                             (
                                 <Grid display={'inline-flex'} gap={2}>
-                                    <Button variant="contained" aria-label="new-movie" onClick={handleCreateFilm}>
+                                    <Button sx={{alignSelf: 'center'}} variant="contained" aria-label="new-movie" onClick={handleCreateFilm}>
                                         <VideoCall/>
                                     </Button>
-                                    <Button variant="contained" onClick={handleAvatar}>
+                                    <Button onClick={handleAvatar}>
                                         <Avatar
                                             src={apiClient.defaults.baseURL + "/users/" + getUserId() + "/image"}
                                             sx={{ bgcolor: deepOrange[500], width: "50px", height: "50px" }}
                                         />
                                     </Button>
-                                    <Button href='/' variant="contained" onClick={handleLogoutButton}>Logout</Button>
+                                    <Button href='/' sx={{alignSelf: 'center'}} variant="contained" onClick={handleLogoutButton}>Logout</Button>
                                 </Grid>
                             )
                             :

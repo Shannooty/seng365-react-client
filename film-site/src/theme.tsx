@@ -13,21 +13,17 @@ declare module '@mui/material/styles' {
 const { palette } = createTheme();
 export const theme = createTheme({
     palette: {
+        mode: 'dark',
         primary: {
-            main: '#16181c',
+            main: "#0581a1"
         },
         secondary: {
-            main: '#2e323b',
+            main: "#a8a8a8"
         },
-        error: {
-            main: '#bd4444',
-        },
-        success: {
-            main: '#5ada65',
-        },
+
         bgPrimary: palette.augmentColor({
             color: {
-                main: "#ededed"
+                main: "#1a1a1a"
             }
         })
 

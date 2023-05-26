@@ -78,11 +78,11 @@ const FilmTitle = (params: {film: Film}) => {
     const film = params.film
     return (
         <Box display={'flex'} gap={3} flexWrap={'wrap'} alignItems={'center'} alignContent={'flex-end'}>
-            <Typography color={"primary"} variant={'h3'}>
+            <Typography variant={'h3'}>
                 {film.title}
             </Typography>
             <FiberManualRecord/>
-            <Typography color={"primary"} variant={'h3'}>
+            <Typography variant={'h3'}>
                 {film.ageRating}
             </Typography>
             <Typography color={"secondary"} variant={'h4'}>
@@ -229,10 +229,10 @@ export const FilmDetailed = (props : {film: Film}) => {
                 {/* Rating */}
                 <Stack spacing={3} alignItems={'center'}>
                     <Box>
-                        <Typography color={"primary"} variant={'h4'}>
+                        <Typography variant={'h4'}>
                             Rating
                         </Typography>
-                        <Typography color={"primary"} variant={'h4'}>
+                        <Typography variant={'h4'}>
                             {film.rating + " / 10 "}
                             <Star sx={{color: 'gold', fontSize:'35px'}}/>
                         </Typography>

@@ -47,7 +47,6 @@ export const SignIn = (params : {open : boolean, setOpenLogin: Function}) => {
             open={params.open}
         >
             <Grid container component="main" sx={{ height: '100vh' }}>
-                <CssBaseline />
                 <Grid
                     item
                     xs={false}
@@ -66,7 +65,7 @@ export const SignIn = (params : {open : boolean, setOpenLogin: Function}) => {
                                     alignItems: 'center',
                                 }}
                             >
-                                <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+                                <Avatar sx={{ m: 1, bgcolor: 'secondary' }}>
                                     <LockIcon/>
                                 </Avatar>
                                 <Typography component="h1" variant="h5">
@@ -108,7 +107,7 @@ export const SignIn = (params : {open : boolean, setOpenLogin: Function}) => {
                                     <Grid container>
                                         <Grid item>
                                             <Button href={`/register`}>
-                                                {"Don't have an account? Sign Up"}
+                                                Don't have an account? Sign Up
                                             </Button>
                                         </Grid>
                                     </Grid>

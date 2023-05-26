@@ -13,6 +13,7 @@ import SignUp from "./pages/SignUp";
 import {MyFilms} from "./pages/MyFilms";
 import {ProfilePage} from "./pages/ProfilePage";
 import {HomePage} from "./pages/HomePage";
+import {CssBaseline} from "@mui/material";
 
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
 
   return (
       <ThemeProvider theme={theme}>
+          <CssBaseline />
           <div className="App">
               <Router>
                   <SearchContext.Provider value={{searchTerm, setSearchTerm}}>
