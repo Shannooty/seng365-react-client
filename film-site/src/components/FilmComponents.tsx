@@ -17,7 +17,7 @@ import {UserSmall} from "./UserSmall";
 import Carousel from "react-material-ui-carousel";
 import apiClient from "../defaults/axios-config";
 import {Link as RouterLink, useNavigate, useSearchParams} from "react-router-dom";
-import {FilmForm} from "./FilmForm";
+import {FilmForm} from "./Forms";
 import dayjs from "dayjs";
 import {deleteFilm, getFilms} from "../services/FilmService";
 import films from "../pages/Films";
@@ -205,15 +205,6 @@ export const FilmDetailed = (props : {film: Film}) => {
                             <Star sx={{color: 'gold', fontSize:'35px'}}/>
                         </Typography>
                     </Box>
-                    <Box>
-                        <Typography color={"primary"} variant={'h4'}>
-                            Your Rating
-                        </Typography>
-                        <Typography color={"primary"} variant={'h4'} display={'flex'} justifyContent={'center'} alignItems={'center'}>
-                            {film.rating + " / 10 "}
-                            <Star sx={{color: 'gold', fontSize:'35px'}}/>
-                        </Typography>
-                    </Box>
                 </Stack>
             </Box>
 
@@ -223,7 +214,7 @@ export const FilmDetailed = (props : {film: Film}) => {
                         <><Divider orientation={'horizontal'}/>
                             <ListItem>
                                 <Box display={'inline-flex'} gap={2}>
-                                    {dayjs(film.releaseDate) <= dayjs() || film.numReviews > 0 ? (<Box/>) :
+                                    {dayjs(film.releaseDate) <= dayjs() || film.numReviews > 0 ? (<></>) :
                                         (
                                             <Box>
                                                 <Button variant={'contained'} onClick={() => {setOpenEdit(true)}}>Edit Film</Button>
@@ -239,7 +230,7 @@ export const FilmDetailed = (props : {film: Film}) => {
                     )
                     :
                     (
-                        <Box/>
+                        <></>
                     )}
                 <Divider orientation={'horizontal'}/>
                 <ListItem>

@@ -57,3 +57,7 @@ const uploadImage = async (image: File) => {
         return error.response;
     }
 }
+
+export const getUserId = () => {
+    return localStorage.getItem('userId');
+}

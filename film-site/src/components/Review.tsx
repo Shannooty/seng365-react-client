@@ -1,16 +1,33 @@
-import {Avatar, Box, ButtonBase, Collapse, Divider, Grid, List, ListItem, Paper, Typography} from "@mui/material";
+import {
+    Avatar,
+    Box, Button,
+    ButtonBase,
+    Collapse,
+    Divider,
+    Grid,
+    IconButton,
+    List,
+    ListItem,
+    Paper,
+    Typography
+} from "@mui/material";
 import React, {useState} from "react";
 import {UserSmall} from "./UserSmall";
-import {ExpandLess, ExpandMore, Star} from "@mui/icons-material";
+import {Add, ExpandLess, ExpandMore, Star} from "@mui/icons-material";
 import apiClient from "../defaults/axios-config";
+import {getUserId, isLoggedIn} from "../services/UserService";
+import {ReviewDialog} from "./Forms";
+import dayjs from "dayjs";
+import film from "../pages/Film";
 
 
-export const ReviewList = (params : {filmId: number, errorFlag: boolean, setErrorFlag: (arg0: boolean) => void}) => {
+export const ReviewList = (params : {film: Film, errorFlag: boolean, setErrorFlag: Function, setLoginOpen: Function}) => {
 
-    const url = "/films/" + params.filmId;
+    const url = "/films/" + params.film.filmId;
     const [reviews, setReviews] = useState<Review[]>([]);
     const [reviewOpen, setReviewOpen] = React.useState(false);
     const [errorFlag, setErrorFlag] = useState(false);
+    const [openNewReview, setOpenNewReview] = useState(false);
 
     const getReviews = () => {
         apiClient.get(url + "/reviews")
@@ -27,17 +44,43 @@ export const ReviewList = (params : {filmId: number, errorFlag: boolean, setErro
 
     React.useEffect(() => {
         getReviews()
-    }, [errorFlag])
+    }, [errorFlag, openNewReview, params.film])
+
+    function handleReviewAdd() {
+        if (!isLoggedIn()) {
+            params.setLoginOpen(true)
+            return;
+        }
+        setOpenNewReview(true);
+    }
+
+    const userHasReview = (userId: string) => {
+        const userIdsReviewed = reviews.filter((review: Review) => {return review.reviewerId === parseInt(userId)})
+        console.log(userIdsReviewed)
+        return userIdsReviewed.length > 0;
+    }
 
     return (
         <Box>
-            <Box sx={{bgcolor: "bgPrimary.main"}} display={'flex'} py={3} flexWrap={'wrap'} alignItems={'center'} alignContent={'flex-end'}>
-                <ButtonBase disableRipple onClick={handleReviews}>
-                    <Typography mx={2} variant={'h4'}>
-                        {"Reviews (" + reviews.length + ")"}
-                    </Typography>
-                    {reviewOpen ? <ExpandLess sx={{fontSize: '30px'}}/> : <ExpandMore sx={{fontSize: '30px'}}/>}
-                </ButtonBase>
+            <Box sx={{bgcolor: "bgPrimary.main"}} display={'flex'} py={3} flexWrap={'wrap'} alignItems={'center'}>
+                <Box mx={2} display={'flex'} width={"100%"} justifyContent={'space-between'}>
+                    <ButtonBase disableRipple onClick={handleReviews}>
+                        <Typography variant={'h4'}>
+                            {"Reviews (" + reviews.length + ")"}
+                        </Typography>
+                        {reviewOpen ? <ExpandLess sx={{fontSize: '30px'}}/> : <ExpandMore sx={{fontSize: '30px'}}/>}
+                    </ButtonBase>
+                    {
+                        params.film.directorId === parseInt(getUserId() as string) || dayjs(params.film.releaseDate) > dayjs() || userHasReview(getUserId() as string) ?
+                            (<></>)
+                            :
+                            (
+                            <><Button variant={'contained'} onClick={handleReviewAdd} endIcon={<Add/>}>
+                                Add Review
+                            </Button><ReviewDialog open={openNewReview} setOpen={setOpenNewReview} filmId={params.film.filmId}/></>
+                        )
+                    }
+                </Box>
             </Box>
             <Collapse sx={{bgcolor: "bgPrimary.main"}} in={reviewOpen} timeout="auto" unmountOnExit>
                 {reviews.map((review: Review) => {

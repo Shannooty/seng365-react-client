@@ -15,9 +15,11 @@ import {AddAPhoto, Visibility, VisibilityOff} from "@mui/icons-material";
 import apiClient from "../defaults/axios-config";
 import {deepOrange} from "@mui/material/colors";
 import {ChangeEvent, ChangeEventHandler} from "react";
+import {useNavigate} from "react-router-dom";
 
 export default function SignUp(params : {setOpenLogin: Function}) {
 
+    const navigate = useNavigate();
     const [invalidFirst, setInvalidFirst] = React.useState(false);
     const [invalidLast, setInvalidLast] = React.useState(false);
     const [invalidEmail, setInvalidEmail] = React.useState(false);
@@ -90,7 +92,7 @@ export default function SignUp(params : {setOpenLogin: Function}) {
 
     React.useEffect(() =>{
         if (isLoggedIn()) {
-            window.location.href = '/';
+            navigate(0);
         }
     }, [image, invalidImage])
 

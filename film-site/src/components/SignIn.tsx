@@ -11,8 +11,11 @@ import {
 import {Lock as LockIcon} from "@mui/icons-material";
 import React from "react";
 import {isLoggedIn, login} from "../services/UserService";
+import {useNavigate} from "react-router-dom";
 
 export const SignIn = (params : {open : boolean, setOpenLogin: Function}) => {
+
+    const navigate = useNavigate();
 
     const [hasErrors, setHasErrors] = React.useState(false);
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -27,7 +30,7 @@ export const SignIn = (params : {open : boolean, setOpenLogin: Function}) => {
             params.setOpenLogin(true);
             setHasErrors(true);
         } else {
-            window.location.href = '/';
+            navigate(0);
         }
     };
 

@@ -13,7 +13,7 @@ import {FilmDetailed, SimilarFilms} from "../components/FilmComponents";
 import {ReviewList} from "../components/Review";
 import {getFilm} from "../services/FilmService";
 
-const Film = () => {
+const Film = (params: {setLoginOpen: Function}) => {
 
     const { id } = useParams();
     const [film, setFilm] = useState<Film>(defaultFilm);
@@ -34,7 +34,7 @@ const Film = () => {
 
     useEffect(() => {
         getTheFilm()
-    }, [errorFlag])
+    }, [id])
 
     if (errorFlag) {
         return <ErrorPage errorMessage={errorMessage}/>
@@ -50,7 +50,7 @@ const Film = () => {
                 </Box>
                 <Box>
                     <Container sx={{ py: 4, mx: "auto" }} maxWidth="lg">
-                        <ReviewList filmId={film.filmId} errorFlag setErrorFlag={setErrorFlag}/>
+                        <ReviewList film={film} errorFlag setErrorFlag={setErrorFlag} setLoginOpen={params.setLoginOpen}/>
                     </Container>
                 </Box>
                 <Box>

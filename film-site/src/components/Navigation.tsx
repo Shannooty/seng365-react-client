@@ -18,7 +18,7 @@ import {Link as RouterLink} from "react-router-dom";
 import {isLoggedIn, logout} from "../services/UserService";
 import {deepOrange} from "@mui/material/colors";
 import apiClient from "../defaults/axios-config";
-import {FilmForm} from "./FilmForm";
+import {FilmForm} from "./Forms";
 
 
 
@@ -46,11 +46,18 @@ const Navbar = (params: {setOpenLogin: Function}) => {
             <Container maxWidth="xl">
                 <Toolbar sx={{ justifyContent: "space-between" }}>
                     {isLoggedIn() ?
-                        <RouterLink to={"/myfilms"}>
-                            <Button variant={'contained'}>
-                                My Films
-                            </Button>
-                        </RouterLink>
+                        <Box display={'inline-flex'} gap={2}>
+                            <RouterLink to={"/myfilms"}>
+                                <Button variant={'contained'}>
+                                    My Films
+                                </Button>
+                            </RouterLink>
+                            <RouterLink to={"/films"}>
+                                <Button variant={'contained'}>
+                                    All Films
+                                </Button>
+                            </RouterLink>
+                        </Box>
                         :
                         <></>
                     }
@@ -80,11 +87,6 @@ const Navbar = (params: {setOpenLogin: Function}) => {
                                         sx={{ bgcolor: deepOrange[500], width: "50px", height: "50px" }}
                                     />
                                     <Button href='/' variant="contained" onClick={handleLogoutButton}>Logout</Button>
-                                    <RouterLink to={"/myfilms"}>
-                                        <Button variant={'contained'}>
-                                            My Films
-                                        </Button>
-                                    </RouterLink>
                                 </Grid>
                             )
                             :

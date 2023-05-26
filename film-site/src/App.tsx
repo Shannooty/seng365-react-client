@@ -28,7 +28,7 @@ function App() {
                       <Routes>
                           <Route path="/register" element={<SignUp setOpenLogin={setOpenLogin}/>}/>
                           <Route path="/films" element={<Films/>}/>
-                          <Route path="/films/:id" element={<Film/>}/>
+                          <Route path="/films/:id" element={<Film setLoginOpen={setOpenLogin}/>}/>
                           <Route path="/myfilms" element={<MyFilms/>}/>
                           <Route path="*" element={<NotFound/>}/>
                   </Routes>
