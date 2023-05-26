@@ -51,7 +51,7 @@ export const isLoggedIn = () => {
 
 const uploadImage = async (image: File) => {
     try {
-        return await apiClient.put(`/users/${localStorage.getItem("userId")}/image`, image, {headers: {
+        return await apiClient.put(`/users/${getUserId()}/image`, image, {headers: {
                 'Content-Type': image.type}});
     } catch (error: AxiosError | any) {
         return error.response;
@@ -60,4 +60,34 @@ const uploadImage = async (image: File) => {
 
 export const getUserId = () => {
     return localStorage.getItem('userId');
+}
+
+export const getUser = async () => {
+    try {
+        return await apiClient.get(`/users/${getUserId()}`)
+    } catch (error: AxiosError | any) {
+        return error.response;
+    }
+}
+
+export const editUser = async (email: FormDataEntryValue | null, firstName: FormDataEntryValue | null, lastName: FormDataEntryValue | null, password: FormDataEntryValue | null, newPassword: FormDataEntryValue | null, image: File) => {
+    try {
+        const dataFull = {
+            email: email,
+            firstName: firstName,
+            lastName: lastName,
+            password : newPassword,
+            currentPassword: password
+        }
+        const smallData = {
+            email: email,
+            firstName: firstName,
+            lastName: lastName,
+        }
+        const response = await apiClient.patch(`/users/${getUserId()}`, newPassword || password ? dataFull : smallData);
+        await uploadImage(image);
+        return response;
+    } catch (error: AxiosError | any) {
+        return error.response;
+    }
 }

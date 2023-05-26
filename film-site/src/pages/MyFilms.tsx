@@ -2,15 +2,17 @@ import {FilmQueryList} from "../components/FilmComponents";
 import React from "react";
 import {Container, Grid, Typography} from "@mui/material";
 import {useNavigate, useSearchParams} from "react-router-dom";
-import {isLoggedIn} from "../services/UserService";
+import {getUserId, isLoggedIn} from "../services/UserService";
 
 export const MyFilms = () => {
 
     const navigate = useNavigate();
 
-    if (!isLoggedIn()) {
-        navigate('/');
-    }
+    React.useEffect(() => {
+        if (!isLoggedIn()) {
+            navigate('/');
+        }
+    }, [])
 
 
     return (
@@ -20,7 +22,7 @@ export const MyFilms = () => {
                     <Typography variant={'h3'}>My Films</Typography>
                 </Grid>
                 <Grid item xs={12}>
-                    <FilmQueryList query={`directorId=${localStorage.getItem('userId')}&`}/>
+                    <FilmQueryList query={`directorId=${getUserId()}&`}/>
                 </Grid>
             </Grid>
         </Container>

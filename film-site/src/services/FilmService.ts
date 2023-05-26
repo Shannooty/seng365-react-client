@@ -86,3 +86,14 @@ export const getFilms = async (params = '') => {
         return error.response;
     }
 }
+
+export const createReview = async (rating: number, filmId: number, review?: FormDataEntryValue | null) => {
+    try {
+        return await apiClient.post(`/films/${filmId}/reviews`, {
+            rating: rating,
+            review: review,
+        });
+    } catch (error: AxiosError | any) {
+        return error.response;
+    }
+}

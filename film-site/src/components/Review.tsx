@@ -56,7 +56,6 @@ export const ReviewList = (params : {film: Film, errorFlag: boolean, setErrorFla
 
     const userHasReview = (userId: string) => {
         const userIdsReviewed = reviews.filter((review: Review) => {return review.reviewerId === parseInt(userId)})
-        console.log(userIdsReviewed)
         return userIdsReviewed.length > 0;
     }
 

@@ -12,6 +12,7 @@ import {SignIn} from "./components/SignIn";
 import SignUp from "./pages/SignUp";
 import {isLoggedIn} from "./services/UserService";
 import {MyFilms} from "./pages/MyFilms";
+import {ProfilePage} from "./pages/ProfilePage";
 
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
                           <Route path="/films" element={<Films/>}/>
                           <Route path="/films/:id" element={<Film setLoginOpen={setOpenLogin}/>}/>
                           <Route path="/myfilms" element={<MyFilms/>}/>
+                          <Route path="/profile" element={<ProfilePage/>}/>
                           <Route path="*" element={<NotFound/>}/>
                   </Routes>
                   </SearchContext.Provider>

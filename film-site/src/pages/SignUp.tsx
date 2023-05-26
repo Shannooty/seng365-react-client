@@ -98,7 +98,6 @@ export default function SignUp(params : {setOpenLogin: Function}) {
 
     return (
         <Container component="main" maxWidth="xs">
-            <CssBaseline/>
             <Box
                 sx={{
                     marginTop: 8,

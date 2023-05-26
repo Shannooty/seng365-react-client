@@ -22,6 +22,7 @@ import dayjs from "dayjs";
 import {deleteFilm, getFilms} from "../services/FilmService";
 import films from "../pages/Films";
 import {SearchContext} from "../contexts/search-context";
+import {getUserId, logout} from "../services/UserService";
 
 export const SimilarFilms = (params : {film: Film}) => {
     const film = params.film;
@@ -94,7 +95,8 @@ export const FilmSimpleList = (params: {films: Film[]}) => {
 
 export const FilmQueryList = (params: {query: string}) => {
 
-    const [films, setFilms] = React.useState<Array<Film>>([]);
+    const navigate = useNavigate();
+    const [films, setFilms] = React.useState<Array<Film>>(new Array<Film>);
     const [currentPage, setCurrentPage] = React.useState (1);
     const [numPages, setNumPages] = React.useState (0);
 
@@ -210,7 +212,7 @@ export const FilmDetailed = (props : {film: Film}) => {
 
             {/* FilmComponents info */}
             <List>
-                {film.directorId.toString() === localStorage.getItem("userId") ? (
+                {film.directorId.toString() === getUserId() ? (
                         <><Divider orientation={'horizontal'}/>
                             <ListItem>
                                 <Box display={'inline-flex'} gap={2}>
