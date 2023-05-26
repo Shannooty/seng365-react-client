@@ -1,5 +1,5 @@
 import React, {ChangeEvent} from "react";
-import {AppBar, Avatar, Box, Button, Container, Grid, IconButton, InputBase, Paper, Toolbar} from "@mui/material";
+import {AppBar, Avatar, Box, Button, Container, Grid, IconButton, InputBase, Paper, Toolbar, Typography} from "@mui/material";
 import {Search, VideoCall} from "@mui/icons-material";
 import {SearchContext} from "../contexts/search-context";
 import {Link as RouterLink, useNavigate} from "react-router-dom";
@@ -37,6 +37,23 @@ const Navbar = (params: {setOpenLogin: Function}) => {
         <AppBar position="static">
             <Container maxWidth="xl">
                 <Toolbar sx={{ justifyContent: "space-between" }}>
+                    <Typography
+                        variant="h6"
+                        noWrap
+                        component="a"
+                        href="/"
+                        sx={{
+                            mr: 2,
+                            display: { xs: 'none', md: 'flex' },
+                            fontFamily: 'monospace',
+                            fontWeight: 700,
+                            letterSpacing: '.3rem',
+                            color: 'inherit',
+                            textDecoration: 'none',
+                        }}
+                    >
+                        eMDB
+                    </Typography>
                     {isLoggedIn() ?
                         <Box display={'inline-flex'} gap={2}>
                             <RouterLink to={"/myfilms"}>
@@ -51,7 +68,7 @@ const Navbar = (params: {setOpenLogin: Function}) => {
                             </RouterLink>
                         </Box>
                         :
-                        <Box/>
+                        <></>
                     }
                     <Paper sx={{borderRadius: "30px",  width: '50%', display:'flex', alignItems: 'center'}}>
                         <InputBase
